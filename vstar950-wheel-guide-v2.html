@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V-Star 950 Touring — Wheel Removal Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0f1117; --surface:#181c27; --surface2:#1f2435; --border:#2a3045;
+    --text:#dde3f0; --muted:#7b879e; --front:#3b9eff; --front-dim:#1a3a5c;
+    --rear:#ff7c3b; --rear-dim:#5c2e10; --warn:#ffcc00; --warn-dim:#3a3000;
+    --danger:#ff3b3b; --danger-dim:#3a0a0a; --tip:#3bffb0; --tip-dim:#0a3325;
+    --mono:'Share Tech Mono',monospace; --head:'Rajdhani',sans-serif; --body:'Inter',sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:17px;line-height:1.65;min-height:100vh;}
+  .site-header{background:linear-gradient(135deg,#0b0f1a 0%,#151c2e 100%);border-bottom:2px solid var(--border);padding:28px 20px 22px;text-align:center;position:relative;overflow:hidden;}
+  .site-header::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 18px,rgba(59,158,255,.03) 18px,rgba(59,158,255,.03) 19px);pointer-events:none;}
+  .site-header .badge{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.15em;color:var(--front);background:rgba(59,158,255,.1);border:1px solid rgba(59,158,255,.3);border-radius:3px;padding:3px 10px;margin-bottom:12px;text-transform:uppercase;}
+  .site-header h1{font-family:var(--head);font-size:clamp(28px,6vw,46px);font-weight:700;letter-spacing:.03em;line-height:1.1;color:#fff;}
+  .site-header h1 span{color:var(--front);}
+  .site-header .subtitle{font-family:var(--mono);font-size:13px;color:var(--muted);margin-top:8px;letter-spacing:.06em;}
+  .nav-tabs{display:flex;flex-wrap:wrap;gap:2px;background:var(--surface);border-bottom:2px solid var(--border);padding:0 12px;position:sticky;top:0;z-index:100;}
+  .nav-tabs a{display:inline-block;padding:12px 14px;font-family:var(--head);font-size:14px;font-weight:600;letter-spacing:.05em;text-decoration:none;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;transition:color .15s,border-color .15s;white-space:nowrap;}
+  .nav-tabs a:hover{color:var(--text);}
+  .nav-tabs a.front{border-color:var(--front);color:var(--front);}
+  .nav-tabs a.rear{border-color:var(--rear);color:var(--rear);}
+  .container{max-width:820px;margin:0 auto;padding:28px 16px 60px;}
+  .section{margin-bottom:48px;}
+  .section-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid var(--border);}
+  .section-header .tab-label{font-family:var(--head);font-size:clamp(22px,4vw,30px);font-weight:700;letter-spacing:.04em;line-height:1;}
+  .tab-label.front-label{color:var(--front);} .tab-label.rear-label{color:var(--rear);} .tab-label.neutral-label{color:var(--text);}
+  .section-header .tab-num{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:3px 8px;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:14px;}
+  .step{display:grid;grid-template-columns:54px 1fr;gap:16px;margin-bottom:18px;align-items:start;}
+  .step-num{width:54px;height:54px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--head);font-size:26px;font-weight:700;flex-shrink:0;line-height:1;}
+  .step-num.front{background:var(--front-dim);color:var(--front);border:2px solid var(--front);}
+  .step-num.rear{background:var(--rear-dim);color:var(--rear);border:2px solid var(--rear);}
+  .step-body{padding-top:4px;}
+  .step-body h3{font-family:var(--head);font-size:19px;font-weight:600;margin-bottom:6px;color:#fff;}
+  .step-body p{margin-bottom:8px;}
+  .step-body ul{padding-left:20px;} .step-body li{margin-bottom:4px;}
+  .callout{border-radius:8px;padding:14px 16px;margin:12px 0;font-size:15px;display:flex;gap:12px;align-items:flex-start;}
+  .callout-icon{font-size:20px;flex-shrink:0;line-height:1.3;}
+  .callout-body strong{display:block;margin-bottom:3px;font-size:14px;letter-spacing:.05em;font-family:var(--mono);}
+  .callout.warn{background:var(--warn-dim);border:1px solid var(--warn);color:var(--warn);}
+  .callout.warn .callout-body{color:#ffe066;}
+  .callout.danger{background:var(--danger-dim);border:1px solid var(--danger);color:var(--danger);}
+  .callout.danger .callout-body{color:#ff9090;}
+  .callout.tip{background:var(--tip-dim);border:1px solid var(--tip);color:var(--tip);}
+  .callout.tip .callout-body{color:#a0ffdc;}
+  .callout.info-front{background:var(--front-dim);border:1px solid var(--front);color:var(--front);}
+  .callout.info-front .callout-body{color:#99ccff;}
+  .callout.info-rear{background:var(--rear-dim);border:1px solid var(--rear);color:var(--rear);}
+  .callout.info-rear .callout-body{color:#ffc299;}
+  .part-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin:10px 0;font-size:14px;color:var(--muted);}
+  .part-box .part-title{font-family:var(--head);font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+  .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .dot-front{background:var(--front);} .dot-rear{background:var(--rear);}
+  .torque{display:inline-block;font-family:var(--mono);font-size:13px;background:#1a2040;border:1px solid #3b5acc;color:#88aaff;border-radius:5px;padding:2px 9px;margin:2px;white-space:nowrap;}
+  .part-chip{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#1a2a40,#1f3050);border:1.5px solid var(--front);color:#aad4ff;border-radius:6px;padding:2px 9px 2px 6px;font-family:var(--mono);font-size:13px;cursor:pointer;transition:background .15s,border-color .15s,transform .1s;vertical-align:middle;white-space:nowrap;user-select:none;-webkit-tap-highlight-color:transparent;}
+  .part-chip:hover{background:linear-gradient(135deg,#223555,#2a4068);border-color:#6bbfff;color:#cce8ff;}
+  .part-chip:active{transform:scale(.96);}
+  .part-chip.rear-chip{background:linear-gradient(135deg,#2a1808,#3a200e);border-color:var(--rear);color:#ffcc99;}
+  .part-chip.rear-chip:hover{background:linear-gradient(135deg,#3a2010,#4a2e18);border-color:#ffaa66;color:#ffe0bb;}
+  #part-modal{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);padding:20px;overflow-y:auto;align-items:flex-start;justify-content:center;}
+  #part-modal.open{display:flex;}
+  #modal-box{background:#141927;border:1.5px solid var(--border);border-radius:16px;width:100%;max-width:540px;margin:auto;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.7);animation:modal-in .2s ease;}
+  @keyframes modal-in{from{opacity:0;transform:translateY(20px) scale(.97);}to{opacity:1;transform:none;}}
+  #modal-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid var(--border);}
+  #modal-part-name{font-family:var(--head);font-size:22px;font-weight:700;color:#fff;}
+  #modal-close{background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:8px;width:36px;height:36px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;}
+  #modal-close:hover{background:#2a3045;color:var(--text);}
+  #modal-visual{background:#0d1020;padding:20px;text-align:center;min-height:180px;display:flex;align-items:center;justify-content:center;}
+  #modal-visual svg{max-width:100%;}
+  #modal-body{padding:18px 20px 22px;}
+  #modal-desc{font-size:15.5px;line-height:1.7;color:var(--text);margin-bottom:12px;}
+  #modal-tags{display:flex;flex-wrap:wrap;gap:6px;}
+  .modal-tag{font-family:var(--mono);font-size:12px;padding:3px 10px;border-radius:4px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);}
+  .modal-tag.blue{border-color:var(--front);color:var(--front);background:var(--front-dim);}
+  .modal-tag.amber{border-color:var(--rear);color:var(--rear);background:var(--rear-dim);}
+  .modal-tag.green{border-color:var(--tip);color:var(--tip);background:var(--tip-dim);}
+  .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--front);border-radius:50%;animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  #modal-loading{display:flex;flex-direction:column;align-items:center;gap:14px;color:var(--muted);font-family:var(--mono);font-size:13px;}
+  .checklist{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin-top:14px;}
+  .check-item{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:9px 12px;font-size:14.5px;display:flex;align-items:center;gap:10px;}
+  .check-item::before{content:'☐';font-size:18px;color:var(--muted);flex-shrink:0;}
+  .oem-table{width:100%;border-collapse:collapse;font-size:14px;margin-top:14px;}
+  .oem-table th{background:var(--surface2);color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-align:left;padding:10px 12px;border-bottom:2px solid var(--border);}
+  .oem-table td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .oem-table tr:hover td{background:var(--surface2);}
+  .oem-table td:last-child{font-family:var(--mono);color:#88aaff;font-size:13px;}
+  .oem-table .part-name{color:var(--text);font-weight:500;}
+  .oem-table .part-cat{display:inline-block;font-size:11px;padding:1px 7px;border-radius:3px;margin-left:6px;font-family:var(--mono);}
+  .oem-table .cat-f{background:var(--front-dim);color:var(--front);}
+  .oem-table .cat-r{background:var(--rear-dim);color:var(--rear);}
+  .oem-table .cat-c{background:var(--tip-dim);color:var(--tip);}
+  .torque-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:14px;}
+  .torque-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;}
+  .torque-card .t-label{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.06em;margin-bottom:6px;}
+  .torque-card .t-value{font-family:var(--head);font-size:28px;font-weight:700;line-height:1;}
+  .torque-card .t-unit{font-family:var(--mono);font-size:13px;color:var(--muted);}
+  .torque-card.tf .t-value{color:var(--front);} .torque-card.tr .t-value{color:var(--rear);} .torque-card.tc .t-value{color:var(--text);}
+  .re-item{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border);font-size:15.5px;}
+  .re-item:last-child{border-bottom:none;}
+  .re-num{font-family:var(--head);font-size:18px;font-weight:700;color:var(--muted);min-width:28px;}
+  .diagram-wrap{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:14px 0;text-align:center;}
+  .diagram-wrap figcaption{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:10px;letter-spacing:.05em;}
+  .divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:36px 0;}
+  @media print{
+    body{background:#fff;color:#111;font-size:13px;}
+    .nav-tabs,#part-modal,.site-header::before{display:none!important;}
+    .site-header{background:#fff;border-bottom:2px solid #333;}
+    .site-header h1{color:#111;} .site-header h1 span{color:#1a5cb0;}
+    .card,.part-box,.check-item,.torque-card,.callout,.diagram-wrap{border:1px solid #ccc!important;background:#f9f9f9!important;color:#111!important;}
+    .part-chip{border:1px solid #999!important;background:#eee!important;color:#333!important;}
+    .step-num.front,.step-num.rear{color:#111!important;background:#eee!important;border-color:#aaa!important;}
+    a{color:inherit;text-decoration:none;} .section{page-break-inside:avoid;}
+    .oem-table th{background:#eee!important;color:#333!important;}
+  }
+  @media(max-width:500px){
+    .step{grid-template-columns:46px 1fr;gap:10px;}
+    .step-num{width:46px;height:46px;font-size:22px;}
+    .checklist{grid-template-columns:1fr;}
+    .torque-grid{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+<!-- MODAL -->
+<div id="part-modal" role="dialog" aria-modal="true" aria-labelledby="modal-part-name">
+  <div id="modal-box">
+    <div id="modal-header">
+      <span id="modal-part-name">Part</span>
+      <button id="modal-close" aria-label="Close">✕</button>
+    </div>
+    <div id="modal-visual"><div id="modal-loading"><div class="spinner"></div><span>Looking up part…</span></div></div>
+    <div id="modal-body">
+      <div id="modal-desc"></div>
+      <div id="modal-tags"></div>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="badge">Personal Shop Manual · Rev 2.0</div>
+  <h1>2014 Yamaha <span>V-Star 950</span> Touring<br>Wheel Removal Guide</h1>
+  <p class="subtitle">XVS950CT · Belt Drive · Single Front Disc · No ABS &nbsp;·&nbsp; <span style="color:var(--front);font-family:var(--mono);font-size:11px;border:1px solid var(--front);border-radius:4px;padding:1px 6px;">tap any part</span> to see it</p>
+</header>
+
+<!-- NAV -->
+<nav class="nav-tabs">
+  <a href="#tools">🔧 Tools</a>
+  <a href="#safety">⚠️ Safety</a>
+  <a href="#front" class="front">FRONT Wheel</a>
+  <a href="#rear" class="rear">REAR Wheel</a>
+  <a href="#oem">OEM Parts</a>
+  <a href="#torque">Torque Specs</a>
+  <a href="#reassembly">Reassembly</a>
+</nav>
+
+<div class="container">
+
+<!-- TOOLS -->
+<section class="section" id="tools">
+  <div class="section-header"><span class="tab-label neutral-label">🔧 Tools &amp; Materials</span><span class="tab-num">SECTION 01</span></div>
+  <div class="card">
+    <div style="font-family:var(--head);font-size:17px;font-weight:600;color:var(--text);margin-bottom:12px;">Hand Tools</div>
+    <div class="checklist">
+      <div class="check-item"><span class="part-chip" data-part="Floor Jack" data-ctx="automotive garage floor jack used to lift vehicles">🔩 Floor Jack</span></div>
+      <div class="check-item"><span class="part-chip" data-part="Center Lift Stand" data-ctx="Harbor Freight motorcycle center lift stand scissor-style platform lift">🔩 Center Lift Stand</span></div>
+      <div class="check-item"><span class="part-chip" data-part="Torque Wrench" data-ctx="click-style torque wrench 0-150 ft-lb for automotive fasteners">🔩 Torque Wrench</span></div>
+      <div class="check-item"><span class="part-chip" data-part="27mm Socket" data-ctx="27mm deep socket for front motorcycle axle nut">🔩 27mm Socket</span></div>
+      <div class="check-item"><span class="part-chip" data-part="24mm Socket" data-ctx="24mm socket for rear motorcycle axle nut">🔩 24mm Socket</span></div>
+      <div class="check-item"><span class="part-chip" data-part="12mm Socket" data-ctx="12mm socket for brake caliper bolts on motorcycle">🔩 12mm Socket</span></div>
+      <div class="check-item"><span class="part-chip" data-part="10mm Socket" data-ctx="10mm socket for brake rotor bolts on motorcycle wheel">🔩 10mm Socket</span></div>
+      <div class="check-item"><span class="part-chip" data-part="Breaker Bar" data-ctx="long breaker bar used to loosen tight automotive fasteners">🔩 Breaker Bar</span></div>
+      <div class="check-item"><span class="part-chip" data-part="Rubber Mallet" data-ctx="dead-blow rubber mallet for tapping motorcycle axle without damaging threads">🔩 Rubber Mallet</span></div>
+      <div class="check-item"><span class="part-chip" data-part="Snap-Ring Pliers" data-ctx="snap ring pliers for wheel bearing retainer rings">🔩 Snap-Ring Pliers</span></div>
+      <div class="check-item"><span class="part-chip" data-part="Needle-Nose Pliers" data-ctx="needle nose pliers for small clips and cotter pins on motorcycle">🔩 Needle-Nose Pliers</span></div>
+      <div class="check-item"><span class="part-chip" data-part="Allen / Hex Key Set" data-ctx="metric hex key set 6mm 8mm for motorcycle bolts">🔩 Allen / Hex Set</span></div>
+      <div class="check-item"><span class="part-chip" data-part="Impact Wrench" data-ctx="1/2 inch drive impact wrench used to quickly remove tight bolts and axle nuts">🔩 Impact Wrench</span></div>
+      <div class="check-item"><span class="part-chip" data-part="Wire Brush" data-ctx="steel wire brush for cleaning axle threads and mounting surfaces">🔩 Wire Brush</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div style="font-family:var(--head);font-size:17px;font-weight:600;color:var(--text);margin-bottom:12px;">Consumables &amp; Supplies</div>
+    <div class="checklist">
+      <div class="check-item"><span class="part-chip" data-part="Brake Cleaner" data-ctx="aerosol brake cleaner spray for cleaning rotors and brake components">🔩 Brake Cleaner</span></div>
+      <div class="check-item"><span class="part-chip" data-part="Anti-Seize Compound" data-ctx="anti-seize lubricant applied to axle threads to prevent galling">🔩 Anti-Seize</span></div>
+      <div class="check-item"><span class="part-chip" data-part="Loctite 243 Blue" data-ctx="blue medium-strength threadlocker Loctite 243 for rotor bolts">🔩 Loctite 243 Blue</span></div>
+      <div class="check-item"><span class="part-chip" data-part="Bearing Grease" data-ctx="wheel bearing grease for motorcycle wheel bearings">🔩 Bearing Grease</span></div>
+      <div class="check-item"><span class="part-chip" data-part="Oil Drain Pan" data-ctx="automotive oil drain pan for motorcycle oil change">🔩 Oil Drain Pan</span></div>
+      <div class="check-item"><span class="part-chip" data-part="Crush Washer" data-ctx="aluminum crush washer for motorcycle oil drain plug single-use sealing washer">🔩 Crush Washer</span></div>
+      <div class="check-item">Nitrile gloves</div>
+      <div class="check-item">Labeled zip-lock bags (spacers!)</div>
+      <div class="check-item">Masking tape + sharpie</div>
+      <div class="check-item">10W-40 motorcycle oil (3.2 qt)</div>
+    </div>
+  </div>
+  <div class="callout tip"><span class="callout-icon">💡</span><div class="callout-body"><strong>PRO TIP</strong> Bag and label every spacer and fastener immediately. Use separate bags for LEFT and RIGHT. Tap any blue highlighted part above to see a picture of what it looks like.</div></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SAFETY -->
+<section class="section" id="safety">
+  <div class="section-header"><span class="tab-label neutral-label">⚠️ Safety First</span><span class="tab-num">SECTION 02</span></div>
+  <div class="callout danger"><span class="callout-icon">🚨</span><div class="callout-body"><strong>CRITICAL — READ BEFORE TOUCHING ANYTHING</strong>
+  Engine OFF. Ignition key removed. <span class="part-chip" data-part="Kill Switch" data-ctx="motorcycle kill switch engine stop button on right handlebar red rocker switch">🔩 Kill Switch</span> in OFF position. Bike in NEUTRAL. <span class="part-chip" data-part="Wheel Chock" data-ctx="rubber wheel chock used to hold motorcycle tire in place during maintenance">🔩 Wheel Chocks</span> placed front &amp; rear before lifting.</div></div>
+  <div class="diagram-wrap">
+    <figure>
+      <svg viewBox="0 0 520 260" width="100%" style="max-width:520px;">
+        <rect x="80" y="95" width="360" height="14" rx="7" fill="#2a3045"/>
+        <rect x="100" y="80" width="16" height="30" rx="4" fill="#2a3045"/>
+        <rect x="400" y="80" width="16" height="30" rx="4" fill="#2a3045"/>
+        <rect x="180" y="109" width="160" height="60" rx="8" fill="#1e2535"/>
+        <rect x="200" y="120" width="120" height="38" rx="5" fill="#252e40"/>
+        <rect x="220" y="170" width="80" height="12" rx="4" fill="#3b5acc"/>
+        <rect x="210" y="182" width="100" height="8" rx="3" fill="#ff7c3b"/>
+        <line x1="240" y1="190" x2="220" y2="230" stroke="#ff7c3b" stroke-width="5" stroke-linecap="round"/>
+        <line x1="280" y1="190" x2="300" y2="230" stroke="#ff7c3b" stroke-width="5" stroke-linecap="round"/>
+        <line x1="220" y1="230" x2="300" y2="230" stroke="#ff7c3b" stroke-width="6" stroke-linecap="round"/>
+        <rect x="205" y="175" width="110" height="10" rx="3" fill="#d66520"/>
+        <circle cx="110" cy="182" r="38" fill="none" stroke="#3b9eff" stroke-width="6"/>
+        <circle cx="110" cy="182" r="22" fill="none" stroke="#2a3045" stroke-width="3"/>
+        <circle cx="410" cy="182" r="38" fill="none" stroke="#ff7c3b" stroke-width="6"/>
+        <circle cx="410" cy="182" r="22" fill="none" stroke="#2a3045" stroke-width="3"/>
+        <text x="110" y="235" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="11" fill="#3b9eff">FRONT</text>
+        <text x="410" y="235" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="11" fill="#ff7c3b">REAR</text>
+        <text x="260" y="253" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="11" fill="#ff7c3b">LIFT STAND</text>
+        <line x1="350" y1="148" x2="280" y2="168" stroke="#ffcc00" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <circle cx="280" cy="168" r="3" fill="#ffcc00"/>
+        <text x="355" y="145" font-family="'Share Tech Mono',monospace" font-size="11" fill="#ffcc00">CONTACT POINT</text>
+        <text x="355" y="158" font-family="'Share Tech Mono',monospace" font-size="11" fill="#ffcc00">FRAME CROSS-MEMBER</text>
+        <rect x="14" y="50" width="90" height="22" rx="4" fill="#0a3325" stroke="#3bffb0" stroke-width="1"/>
+        <text x="59" y="65" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="11" fill="#3bffb0">NO ABS</text>
+      </svg>
+      <figcaption>Harbor Freight center lift — contact at frame cross-member under engine. Both tires must clear the ground.</figcaption>
+    </figure>
+  </div>
+  <div class="card"><ul style="padding-left:18px;line-height:2;">
+    <li>Place stand under the <strong>main frame cross-member</strong> just behind the engine oil pan — NOT under the oil pan itself.</li>
+    <li>Raise until both wheels have 1–2 inches of clearance. Rock the bike gently before working.</li>
+    <li>Keep a helper nearby or use chocks against the stand legs for extra stability.</li>
+  </ul></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FRONT WHEEL -->
+<section class="section" id="front">
+  <div class="section-header"><span class="tab-label front-label">FRONT WHEEL REMOVAL</span><span class="tab-num">SECTION 03</span></div>
+  <div class="callout info-front"><span class="callout-icon">ℹ️</span><div class="callout-body"><strong>SETUP NOTE</strong> 2014 V-Star 950 Touring: <strong>single front disc, left side only. NO ABS.</strong> Speedo is cable-driven from left fork — no sensor on wheel hub.</div></div>
+
+  <div class="step"><div class="step-num front">F1</div><div class="step-body">
+    <h3>Loosen the Axle Nut — Before Lifting</h3>
+    <p>With the front wheel on the ground, break the <span class="part-chip" data-part="Front Axle Nut" data-ctx="27mm hex nut on the right side of the front axle of a 2014 Yamaha V-Star 950 motorcycle">🔩 Front Axle Nut</span> loose counter-clockwise. Use a <span class="part-chip" data-part="Breaker Bar" data-ctx="long breaker bar used to loosen tight automotive fasteners like axle nuts">🔩 Breaker Bar</span> or impact — it's torqued to ~59 ft-lb from factory.</p>
+    <div class="callout tip"><span class="callout-icon">💡</span><div class="callout-body"><strong>PRO TIP</strong> Loosen it while the tire is still on the ground — the tire holds the axle still. Much easier than fighting it in the air.</div></div>
+  </div></div>
+
+  <div class="step"><div class="step-num front">F2</div><div class="step-body">
+    <h3>Remove the Front Brake Caliper</h3>
+    <p>The <span class="part-chip" data-part="Front Brake Caliper" data-ctx="single-piston front brake caliper on 2014 Yamaha V-Star 950 mounted on left fork lower behind the disc rotor">🔩 Front Brake Caliper</span> is on the left fork lower. Two <span class="torque">12mm bolts</span> hold it. Remove both and slide the caliper off the disc.</p>
+    <div class="callout warn"><span class="callout-icon">⚠️</span><div class="callout-body"><strong>WARNING</strong> Hang the caliper with a zip tie from the fork — never let it dangle by the <span class="part-chip" data-part="Brake Line / Banjo Fitting" data-ctx="rubber brake hose with banjo bolt fitting connecting brake caliper to master cylinder on motorcycle">🔩 Brake Line</span>. A kinked hose = no brakes.</div></div>
+  </div></div>
+
+  <div class="step"><div class="step-num front">F3</div><div class="step-body">
+    <h3>Fender Clearance Check</h3>
+    <p>The <span class="part-chip" data-part="Front Fender" data-ctx="chrome front fender on 2014 Yamaha V-Star 950 Touring bolted to both fork lowers">🔩 Front Fender</span> does NOT need to be removed. There is enough clearance to angle the wheel forward and down past the fender. Have a helper support the wheel.</p>
+  </div></div>
+
+  <div class="step"><div class="step-num front">F4</div><div class="step-body">
+    <h3>Remove the Axle Nut &amp; Axle</h3>
+    <p>Remove the <span class="part-chip" data-part="Front Axle Nut" data-ctx="27mm hex nut on the right side of the front axle of a 2014 Yamaha V-Star 950 motorcycle">🔩 Front Axle Nut</span> and <span class="part-chip" data-part="Axle Flat Washer" data-ctx="flat steel washer that sits between the axle nut and the fork lower on a motorcycle front wheel">🔩 Flat Washer</span> completely. Then tap the <span class="part-chip" data-part="Front Axle" data-ctx="solid steel front axle shaft running through the front wheel hub and fork lowers on a Yamaha V-Star 950">🔩 Front Axle</span> out from the LEFT using a <span class="part-chip" data-part="Rubber Mallet" data-ctx="dead-blow rubber mallet for tapping motorcycle axle without damaging threads">🔩 Rubber Mallet</span> and wooden dowel — slides left-to-right. Catch it.</p>
+    <div class="part-box"><div class="part-title"><span class="dot dot-front"></span>Front Axle — Removal Direction</div>
+      <svg viewBox="0 0 320 70" width="100%" style="max-width:320px;">
+        <rect x="10" y="20" width="24" height="38" rx="4" fill="#1e2a40" stroke="#3b9eff" stroke-width="2"/>
+        <text x="22" y="14" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" fill="#3b9eff">LEFT</text>
+        <rect x="34" y="30" width="200" height="14" rx="7" fill="#4488ff"/>
+        <rect x="234" y="20" width="24" height="38" rx="4" fill="#1e2a40" stroke="#3b9eff" stroke-width="2"/>
+        <text x="246" y="14" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" fill="#3b9eff">RIGHT</text>
+        <polygon points="258,24 280,24 284,37 280,50 258,50 254,37" fill="#ffcc00" opacity=".8"/>
+        <text x="269" y="41" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" fill="#111">27mm</text>
+        <text x="300" y="42" font-family="'Share Tech Mono',monospace" font-size="20" fill="#3bffb0">←</text>
+        <rect x="34" y="26" width="14" height="22" rx="2" fill="#ffcc00" opacity=".5"/>
+        <text x="41" y="62" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="8" fill="#ffcc00">SPACER</text>
+      </svg>
+    </div>
+  </div></div>
+
+  <div class="step"><div class="step-num front">F5</div><div class="step-body">
+    <h3>⚡ Spacers — Do NOT Lose These</h3>
+    <p>Two <span class="part-chip" data-part="Front Axle Spacers" data-ctx="cylindrical steel spacers on either side of the front wheel hub on a Yamaha V-Star 950 sit between the wheel bearing and fork lower">🔩 Front Axle Spacers</span> will fall free as the axle slides out. Photograph and label them LEFT / RIGHT before bagging.</p>
+    <div class="callout danger"><span class="callout-icon">🚨</span><div class="callout-body"><strong>CRITICAL</strong> Swapped or missing spacers cause the wheel to sit off-center, contacting the rotor or fender. BAG AND LABEL: LEFT SPACER / RIGHT SPACER.</div></div>
+    <div class="callout info-front"><span class="callout-icon">ℹ️</span><div class="callout-body"><strong>NO ABS</strong> — No tone ring, no ABS sensor wire, no reluctor ring to worry about. Just spacers.</div></div>
+  </div></div>
+
+  <div class="step"><div class="step-num front">F6</div><div class="step-body">
+    <h3>Withdraw the Wheel</h3>
+    <p>Lower the <span class="part-chip" data-part="Front Wheel Assembly" data-ctx="complete front wheel with tire hub and bearings on a 2014 Yamaha V-Star 950 Touring">🔩 Front Wheel</span> forward and down past the fender. Set on a clean surface — <strong>never rest it on the brake disc face</strong>.</p>
+    <div class="callout tip"><span class="callout-icon">💡</span><div class="callout-body"><strong>PRO TIP</strong> Rest the wheel on a folded shop towel with the rotor facing UP. Rotor face-down on concrete = warp or scratch.</div></div>
+  </div></div>
+
+  <div class="step"><div class="step-num front">F7</div><div class="step-body">
+    <h3>Remove the Front Rotor</h3>
+    <p>Six <span class="torque">10mm bolts</span> hold the <span class="part-chip" data-part="Front Brake Rotor" data-ctx="298mm stainless steel front brake disc rotor on 2014 Yamaha V-Star 950 6-bolt pattern on wheel hub">🔩 Front Brake Rotor</span> to the hub. Loosen in a star pattern. On reinstall: apply <span class="part-chip" data-part="Loctite 243 Blue" data-ctx="blue medium-strength threadlocker Loctite 243 bottle used on rotor bolts">🔩 Loctite 243</span> to threads, torque to <span class="torque">16–20 ft-lb</span>.</p>
+    <div class="part-box"><div class="part-title"><span class="dot dot-front"></span>Front Rotor — 6-Bolt Star Pattern</div>
+      <svg viewBox="0 0 160 160" width="130">
+        <circle cx="80" cy="80" r="65" fill="none" stroke="#3b9eff" stroke-width="3"/>
+        <circle cx="80" cy="80" r="40" fill="none" stroke="#2a3045" stroke-width="2"/>
+        <circle cx="80" cy="80" r="18" fill="#1e2a40" stroke="#2a3045" stroke-width="2"/>
+        <circle cx="80" cy="28" r="7" fill="#ffcc00"/><text x="80" y="32" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" fill="#111">1</text>
+        <circle cx="125" cy="54" r="7" fill="#ffcc00"/><text x="125" y="58" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" fill="#111">4</text>
+        <circle cx="125" cy="106" r="7" fill="#ffcc00"/><text x="125" y="110" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" fill="#111">2</text>
+        <circle cx="80" cy="132" r="7" fill="#ffcc00"/><text x="80" y="136" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" fill="#111">5</text>
+        <circle cx="35" cy="106" r="7" fill="#ffcc00"/><text x="35" y="110" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" fill="#111">3</text>
+        <circle cx="35" cy="54" r="7" fill="#ffcc00"/><text x="35" y="58" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" fill="#111">6</text>
+        <text x="80" y="84" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" fill="#3b9eff">★ STAR ORDER</text>
+      </svg>
+    </div>
+  </div></div>
+</section>
+
+<div class="divider"></div>
+<!-- REAR WHEEL -->
+<section class="section" id="rear">
+  <div class="section-header"><span class="tab-label rear-label">REAR WHEEL REMOVAL</span><span class="tab-num">SECTION 04</span></div>
+  <div class="callout info-rear"><span class="callout-icon">ℹ️</span><div class="callout-body"><strong>BELT DRIVE NOTE</strong> The V-Star 950 uses a toothed rubber <span class="part-chip rear-chip" data-part="Drive Belt" data-ctx="toothed rubber drive belt on 2014 Yamaha V-Star 950 Gates G-Force style belt running from transmission pulley to rear wheel pulley">🔩 Drive Belt</span>. No grease. No sharp bends. Route and tension must be preserved on reassembly.</div></div>
+
+  <div class="step"><div class="step-num rear">R1</div><div class="step-body">
+    <h3>Loosen the Rear Axle Nut — Before Lifting</h3>
+    <p>Loosen the <span class="part-chip rear-chip" data-part="Rear Axle Nut" data-ctx="24mm hex nut on the right side of the rear axle of a 2014 Yamaha V-Star 950 motorcycle torqued to 80 ft-lb">🔩 Rear Axle Nut</span> (24mm, counter-clockwise) before the wheel is fully off the ground. Torqued to ~80 ft-lb — use a breaker bar.</p>
+    <div class="callout tip"><span class="callout-icon">💡</span><div class="callout-body"><strong>PRO TIP</strong> Put the bike in gear while it's still on the ground — rear wheel won't spin and you can break the nut loose solo.</div></div>
+  </div></div>
+
+  <div class="step"><div class="step-num rear">R2</div><div class="step-body">
+    <h3>Remove the Rear Brake Caliper</h3>
+    <p>The <span class="part-chip rear-chip" data-part="Rear Brake Caliper" data-ctx="single-piston rear brake caliper on 2014 Yamaha V-Star 950 mounted on right side swingarm bracket behind rear disc rotor">🔩 Rear Brake Caliper</span> is on the right side of the swingarm. Two <span class="torque">12mm bolts</span> hold it. Remove both, slide caliper off disc, hang with a zip tie — never by the brake line.</p>
+  </div></div>
+
+  <div class="step"><div class="step-num rear">R3</div><div class="step-body">
+    <h3>Photograph the Belt Adjuster Positions</h3>
+    <p>Before touching the <span class="part-chip rear-chip" data-part="Belt Adjuster Blocks" data-ctx="metal belt tension adjuster blocks on the end of the swingarm on a 2014 Yamaha V-Star 950 one on each side used to set rear wheel alignment and belt tension">🔩 Adjuster Blocks</span>, photograph BOTH sides. Count the threads showing. They must return to the exact same position or your wheel will be crooked and the belt will wear unevenly.</p>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 360 130" width="100%" style="max-width:360px;">
+        <rect x="30" y="55" width="260" height="22" rx="5" fill="#2a1808" stroke="#ff7c3b" stroke-width="1.5"/>
+        <circle cx="310" cy="66" r="42" fill="none" stroke="#ff7c3b" stroke-width="3"/>
+        <circle cx="310" cy="66" r="28" fill="none" stroke="#4a2008" stroke-width="2"/>
+        <path d="M 30 52 Q 80 30 200 42 L 280 50" stroke="#3bffb0" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <rect x="20" y="52" width="22" height="28" rx="3" fill="#1e3a0a" stroke="#3bffb0" stroke-width="2"/>
+        <text x="31" y="90" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" fill="#3bffb0">L-ADJ</text>
+        <rect x="20" y="82" width="22" height="28" rx="3" fill="#1e3a0a" stroke="#3bffb0" stroke-width="2" opacity=".5"/>
+        <text x="31" y="120" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" fill="#3bffb0">R-ADJ</text>
+        <circle cx="31" cy="66" r="8" fill="#ff7c3b"/>
+        <text x="31" y="70" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" fill="#111">AX</text>
+        <text x="185" y="18" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="10" fill="#ffcc00">MARK BOTH ADJUSTER POSITIONS</text>
+        <text x="160" y="36" font-family="'Share Tech Mono',monospace" font-size="10" fill="#3bffb0">DRIVE BELT</text>
+      </svg>
+      <figcaption>Photograph both adjusters before loosening. Marks must match on reassembly.</figcaption>
+    </div>
+  </div></div>
+
+  <div class="step"><div class="step-num rear">R4</div><div class="step-body">
+    <h3>Back Off the Adjuster Blocks</h3>
+    <p>Loosen the lock nuts and back the adjuster bolts out equally on both sides, pushing the axle forward toward the engine to create slack in the <span class="part-chip rear-chip" data-part="Drive Belt" data-ctx="toothed rubber drive belt on 2014 Yamaha V-Star 950 motorcycle">🔩 Drive Belt</span>.</p>
+    <div class="callout warn"><span class="callout-icon">⚠️</span><div class="callout-body"><strong>MATCH BOTH SIDES</strong> Back both adjusters out the same number of turns. Mismatched adjusters = crooked wheel = belt wears in weeks.</div></div>
+  </div></div>
+
+  <div class="step"><div class="step-num rear">R5</div><div class="step-body">
+    <h3>Remove the Axle Nut &amp; Axle</h3>
+    <p>Remove the <span class="part-chip rear-chip" data-part="Rear Axle Nut" data-ctx="24mm hex nut on the right side of the rear axle of a 2014 Yamaha V-Star 950 motorcycle torqued to 80 ft-lb">🔩 Rear Axle Nut</span> and flat washer completely from the right side. The <span class="part-chip rear-chip" data-part="Rear Axle" data-ctx="solid steel rear axle shaft running through the rear wheel hub and swingarm on a Yamaha V-Star 950">🔩 Rear Axle</span> slides <strong>right to left</strong> — tap gently from the right with a rubber mallet. Support the wheel as you pull the axle clear.</p>
+  </div></div>
+
+  <div class="step"><div class="step-num rear">R6</div><div class="step-body">
+    <h3>Slide Wheel Back — Remove the Belt</h3>
+    <p>Push the wheel rearward to create slack, then slip the <span class="part-chip rear-chip" data-part="Drive Belt" data-ctx="toothed rubber drive belt on 2014 Yamaha V-Star 950 motorcycle">🔩 Drive Belt</span> off the <span class="part-chip rear-chip" data-part="Rear Drive Pulley" data-ctx="toothed rear drive pulley attached to the rear wheel hub on a Yamaha V-Star 950 the belt engages the teeth of this pulley">🔩 Rear Pulley</span>. Let the belt hang inside the swingarm. Slide the wheel rearward and out.</p>
+    <div class="callout tip"><span class="callout-icon">💡</span><div class="callout-body"><strong>PRO TIP</strong> Clip the belt to the swingarm with a zip tie while you maneuver the wheel free — it will try to drop.</div></div>
+  </div></div>
+
+  <div class="step"><div class="step-num rear">R7</div><div class="step-body">
+    <h3>⚡ Cush Drive Dampers — Do NOT Lose These</h3>
+    <p>As the wheel comes off, the <span class="part-chip rear-chip" data-part="Cush Drive Dampers" data-ctx="6 rectangular rubber cush drive damper blocks inside the rear wheel hub on a Yamaha V-Star 950 they absorb drivetrain shock between the sprocket carrier and wheel hub">🔩 Cush Drive Dampers</span> (6 rubber blocks in the rear hub) will fall free. Collect ALL of them into a labeled bag immediately.</p>
+    <div class="callout danger"><span class="callout-icon">🚨</span><div class="callout-body"><strong>CRITICAL — 6 RUBBER DAMPERS</strong> If even one is missing on reassembly, you will get a loud clunking noise under acceleration and eventual hub damage. Count all 6. Bag them.</div></div>
+    <div class="part-box"><div class="part-title"><span class="dot dot-rear"></span>Cush Drive — Rear Hub (6 Dampers)</div>
+      <svg viewBox="0 0 200 200" width="150">
+        <circle cx="100" cy="100" r="85" fill="none" stroke="#ff7c3b" stroke-width="3"/>
+        <circle cx="100" cy="100" r="55" fill="#1e1008" stroke="#cc5500" stroke-width="2"/>
+        <circle cx="100" cy="100" r="22" fill="#0f0800" stroke="#2a1808" stroke-width="2"/>
+        <rect x="62" y="48" width="20" height="32" rx="5" fill="#3bffb0" transform="rotate(0,100,100)"/>
+        <rect x="62" y="48" width="20" height="32" rx="5" fill="#3bffb0" transform="rotate(60,100,100)"/>
+        <rect x="62" y="48" width="20" height="32" rx="5" fill="#3bffb0" transform="rotate(120,100,100)"/>
+        <rect x="62" y="48" width="20" height="32" rx="5" fill="#3bffb0" transform="rotate(180,100,100)"/>
+        <rect x="62" y="48" width="20" height="32" rx="5" fill="#3bffb0" transform="rotate(240,100,100)"/>
+        <rect x="62" y="48" width="20" height="32" rx="5" fill="#3bffb0" transform="rotate(300,100,100)"/>
+        <text x="100" y="97" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" fill="#ff7c3b">CUSH DRIVE</text>
+        <text x="100" y="110" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" fill="#3bffb0">6× RUBBER</text>
+        <text x="100" y="188" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" fill="#ff3b3b">COUNT ALL 6!</text>
+      </svg>
+    </div>
+    <p style="margin-top:10px;">Also collect the two <span class="part-chip rear-chip" data-part="Rear Axle Spacers" data-ctx="cylindrical steel spacers on either side of the rear wheel hub on a Yamaha V-Star 950 sit between the bearing and swingarm plates">🔩 Rear Axle Spacers</span> — one per side. Bag and label LEFT / RIGHT.</p>
+  </div></div>
+
+  <div class="step"><div class="step-num rear">R8</div><div class="step-body">
+    <h3>Remove the Rear Rotor</h3>
+    <p>Six <span class="torque">10mm bolts</span> hold the <span class="part-chip rear-chip" data-part="Rear Brake Rotor" data-ctx="282mm stainless steel rear brake disc rotor on 2014 Yamaha V-Star 950 bolted to the rear wheel hub">🔩 Rear Brake Rotor</span> to the hub. Star pattern. Clean mating surface with <span class="part-chip" data-part="Brake Cleaner" data-ctx="aerosol brake cleaner spray for cleaning rotors and brake components">🔩 Brake Cleaner</span>. Reinstall with <span class="part-chip rear-chip" data-part="Loctite 243 Blue" data-ctx="blue medium-strength threadlocker Loctite 243 bottle">🔩 Loctite 243</span>, torque to <span class="torque">16–20 ft-lb</span>.</p>
+  </div></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- OEM TABLE -->
+<section class="section" id="oem">
+  <div class="section-header"><span class="tab-label neutral-label">⚙️ OEM Part Numbers</span><span class="tab-num">SECTION 05</span></div>
+  <div class="callout warn"><span class="callout-icon">⚠️</span><div class="callout-body"><strong>REFERENCE ONLY</strong> Verify all part numbers with your Yamaha dealer or MicroficheHub/BikeBandit before ordering. OEM numbers can change with supersessions.</div></div>
+  <div style="overflow-x:auto;">
+  <table class="oem-table">
+    <thead><tr><th>Component</th><th>OEM / Common Part #</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><span class="part-name">Front Axle Nut</span><span class="part-cat cat-f">FRONT</span></td><td>90179-18043</td><td>M18 × 1.5</td></tr>
+      <tr><td><span class="part-name">Rear Axle Nut</span><span class="part-cat cat-r">REAR</span></td><td>90179-20026</td><td>M20 × 1.5</td></tr>
+      <tr><td><span class="part-name">Front Brake Pads</span><span class="part-cat cat-f">FRONT</span></td><td>1RC-W0045-00</td><td>OEM sintered; EBC FA388HH aftermarket</td></tr>
+      <tr><td><span class="part-name">Rear Brake Pads</span><span class="part-cat cat-r">REAR</span></td><td>1RC-W0046-00</td><td>EBC FA409HH aftermarket option</td></tr>
+      <tr><td><span class="part-name">Front Brake Rotor</span><span class="part-cat cat-f">FRONT</span></td><td>1RC-2582T-00</td><td>298mm; min thickness 4.5mm</td></tr>
+      <tr><td><span class="part-name">Rear Brake Rotor</span><span class="part-cat cat-r">REAR</span></td><td>1RC-2580T-00</td><td>282mm; min thickness 4.5mm</td></tr>
+      <tr><td><span class="part-name">Front Wheel Bearings</span><span class="part-cat cat-f">FRONT</span></td><td>93306-30416</td><td>Both sides — inspect on removal</td></tr>
+      <tr><td><span class="part-name">Rear Wheel Bearings</span><span class="part-cat cat-r">REAR</span></td><td>93306-30417</td><td>Sealed — replace if rough/noisy</td></tr>
+      <tr><td><span class="part-name">Drive Belt</span><span class="part-cat cat-c">COMMON</span></td><td>1RC-17641-00 / Gates G-Force</td><td>1-1/8" wide; inspect for cracks</td></tr>
+      <tr><td><span class="part-name">Oil Filter</span><span class="part-cat cat-c">COMMON</span></td><td>5GH-13440-50</td><td>Hiflofiltro HF204 also fits</td></tr>
+      <tr><td><span class="part-name">Drain Plug Washer</span><span class="part-cat cat-c">COMMON</span></td><td>90430-12031</td><td>Aluminum crush washer — replace every drain</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TORQUE -->
+<section class="section" id="torque">
+  <div class="section-header"><span class="tab-label neutral-label">🔧 Torque Quick-Reference</span><span class="tab-num">SECTION 06</span></div>
+  <div class="torque-grid">
+    <div class="torque-card tf"><div class="t-label">FRONT AXLE NUT</div><div class="t-value">59</div><div class="t-unit">ft-lb · 27mm · Anti-seize</div></div>
+    <div class="torque-card tr"><div class="t-label">REAR AXLE NUT</div><div class="t-value">80</div><div class="t-unit">ft-lb · 24mm · Anti-seize</div></div>
+    <div class="torque-card tf"><div class="t-label">FRONT CALIPER BOLTS</div><div class="t-value">22</div><div class="t-unit">ft-lb · 12mm</div></div>
+    <div class="torque-card tr"><div class="t-label">REAR CALIPER BOLTS</div><div class="t-value">22</div><div class="t-unit">ft-lb · 12mm</div></div>
+    <div class="torque-card tc"><div class="t-label">FRONT ROTOR BOLTS</div><div class="t-value">18</div><div class="t-unit">ft-lb · 10mm · Loctite 243</div></div>
+    <div class="torque-card tc"><div class="t-label">REAR ROTOR BOLTS</div><div class="t-value">18</div><div class="t-unit">ft-lb · 10mm · Loctite 243</div></div>
+    <div class="torque-card tc"><div class="t-label">OIL DRAIN PLUG</div><div class="t-value">31</div><div class="t-unit">ft-lb · New crush washer</div></div>
+    <div class="torque-card tc"><div class="t-label">OIL FILTER</div><div class="t-value" style="font-size:18px;">Hand +¾</div><div class="t-unit">Do not over-tighten</div></div>
+  </div>
+  <div class="callout warn" style="margin-top:18px;"><span class="callout-icon">⚠️</span><div class="callout-body"><strong>VERIFY WITH SERVICE MANUAL</strong> Cross-check with Yamaha's official documentation for your VIN before torquing.</div></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REASSEMBLY -->
+<section class="section" id="reassembly">
+  <div class="section-header"><span class="tab-label neutral-label">✅ Reassembly Reminders</span><span class="tab-num">SECTION 07</span></div>
+  <div class="callout danger"><span class="callout-icon">🚨</span><div class="callout-body"><strong>PUMP THE BRAKES BEFORE ROLLING</strong> After installing new pads and rotors, pump each brake lever/pedal until firm resistance. This seats the pads. If you roll without doing this, you have NO brakes.</div></div>
+  <div class="card" style="margin-top:18px;">
+    <div class="re-item"><span class="re-num">1</span><span>Clean rotor mounting faces with <span class="part-chip" data-part="Brake Cleaner" data-ctx="aerosol brake cleaner spray for cleaning rotors">🔩 Brake Cleaner</span>. Dry completely before installation.</span></div>
+    <div class="re-item"><span class="re-num">2</span><span>Install rotors with <span class="part-chip" data-part="Loctite 243 Blue" data-ctx="blue medium-strength threadlocker Loctite 243 bottle used on rotor bolts">🔩 Loctite 243</span> on bolt threads, torque <span class="torque">18 ft-lb</span> star pattern. Keep Loctite off rotor surface.</span></div>
+    <div class="re-item"><span class="re-num">3</span><span><strong>Rear only:</strong> Reinstall all 6 <span class="part-chip rear-chip" data-part="Cush Drive Dampers" data-ctx="6 rectangular rubber cush drive damper blocks inside the rear wheel hub on a Yamaha V-Star 950">🔩 Cush Drive Dampers</span> in hub. COUNT THEM. Then reinstall the sprocket carrier.</span></div>
+    <div class="re-item"><span class="re-num">4</span><span>Apply <span class="part-chip" data-part="Anti-Seize Compound" data-ctx="anti-seize lubricant applied to axle threads to prevent galling and corrosion">🔩 Anti-Seize</span> to axle threads only. Keep it off the spacers and bearings.</span></div>
+    <div class="re-item"><span class="re-num">5</span><span>Reinstall LEFT spacer first, slip axle through, then RIGHT spacer, then seat axle through right side.</span></div>
+    <div class="re-item"><span class="re-num">6</span><span><strong>Rear only:</strong> Re-route <span class="part-chip rear-chip" data-part="Drive Belt" data-ctx="toothed rubber drive belt on 2014 Yamaha V-Star 950 motorcycle">🔩 Drive Belt</span> over rear pulley before seating wheel. Confirm belt fully seated in pulley teeth — no skipped teeth.</span></div>
+    <div class="re-item"><span class="re-num">7</span><span><strong>Rear only:</strong> Set <span class="part-chip rear-chip" data-part="Belt Adjuster Blocks" data-ctx="metal belt tension adjuster blocks on the end of the swingarm on a 2014 Yamaha V-Star 950">🔩 Adjuster Blocks</span> to photographed positions on BOTH sides equally. Tighten lock nuts.</span></div>
+    <div class="re-item"><span class="re-num">8</span><span>Thread axle nut hand-tight, then torque: Front <span class="torque">59 ft-lb</span> / Rear <span class="torque">80 ft-lb</span>. Anti-seize on threads.</span></div>
+    <div class="re-item"><span class="re-num">9</span><span>Reinstall <span class="part-chip" data-part="Front Brake Caliper" data-ctx="single-piston front brake caliper on 2014 Yamaha V-Star 950 mounted on left fork lower">🔩 Front Caliper</span> and <span class="part-chip rear-chip" data-part="Rear Brake Caliper" data-ctx="single-piston rear brake caliper on 2014 Yamaha V-Star 950 mounted on right side swingarm bracket">🔩 Rear Caliper</span> over rotors. Torque caliper bolts <span class="torque">22 ft-lb</span>.</span></div>
+    <div class="re-item"><span class="re-num">10</span><span>Spin each wheel by hand — should rotate freely with slight pad drag. No grinding, binding, or wobble.</span></div>
+    <div class="re-item"><span class="re-num">11</span><span><strong>PUMP BRAKES.</strong> Front lever until firm. Rear pedal until firm. Repeat. Do not skip this step.</span></div>
+    <div class="re-item"><span class="re-num">12</span><span><strong>Belt tension:</strong> Correct deflection is <strong>10–15mm</strong> at mid-span with light finger pressure. Adjust via adjuster blocks if needed, recheck torque.</span></div>
+    <div class="re-item"><span class="re-num">13</span><span>Oil change: drain old oil, install new <span class="part-chip" data-part="Crush Washer" data-ctx="aluminum crush washer for motorcycle oil drain plug single-use sealing washer">🔩 Crush Washer</span> at <span class="torque">31 ft-lb</span>, new <span class="part-chip" data-part="Oil Filter" data-ctx="spin-on motorcycle oil filter for Yamaha V-Star 950 Hiflofiltro HF204 or OEM equivalent">🔩 Oil Filter</span> hand + ¾ turn, fill 3.2 qt with filter change.</span></div>
+    <div class="re-item"><span class="re-num">14</span><span>Lower off stand. Brake bedding: 5–6 moderate stops from ~30mph, let cool, then 5–6 from ~45mph. Brakes will feel dramatically better after bedding.</span></div>
+  </div>
+  <div class="callout tip" style="margin-top:18px;"><span class="callout-icon">💡</span><div class="callout-body"><strong>BELT TENSION REMINDER</strong> Recheck belt tension after 200–300 miles — new tires can settle wheel position slightly. Correct: 10–15mm deflection at mid-span with light pressure.</div></div>
+</section>
+
+<div class="divider"></div>
+<div style="text-align:center;color:var(--muted);font-family:var(--mono);font-size:12px;padding:0 0 20px;">
+  Personal Reference Only · 2014 Yamaha V-Star 950 Touring (XVS950CT) · Rev 2.0<br>
+  Tap any highlighted part chip to see a picture · Verify all specs against the Yamaha service manual
+</div>
+</div>
+<script>
+const PARTS = {
+  "Front Axle Nut":{tags:[{t:"27mm HEX",c:"blue"},{t:"FRONT",c:"blue"},{t:"M18x1.5",c:""}],svg:`<svg viewBox="0 0 160 160" width="140"><polygon points="80,10 128,37 128,90 128,143 80,150 32,143 32,90 32,37" fill="#1e2a40" stroke="#3b9eff" stroke-width="3"/><polygon points="80,30 112,48 112,90 112,132 80,140 48,132 48,90 48,48" fill="#0f1520"/><circle cx="80" cy="90" r="26" fill="#0a0f1a" stroke="#3b9eff" stroke-width="2"/><text x="80" y="86" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="14" fill="#3b9eff">27mm</text><text x="80" y="100" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#88aaff">HEX NUT</text><text x="80" y="155" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#7b879e">FRONT AXLE NUT</text></svg>`},
+  "Rear Axle Nut":{tags:[{t:"24mm HEX",c:"amber"},{t:"REAR",c:"amber"},{t:"M20x1.5",c:""}],svg:`<svg viewBox="0 0 160 160" width="140"><polygon points="80,10 128,37 128,90 128,143 80,150 32,143 32,90 32,37" fill="#2a1808" stroke="#ff7c3b" stroke-width="3"/><polygon points="80,30 112,48 112,90 112,132 80,140 48,132 48,90 48,48" fill="#0f0800"/><circle cx="80" cy="90" r="26" fill="#070500" stroke="#ff7c3b" stroke-width="2"/><text x="80" y="86" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="14" fill="#ff7c3b">24mm</text><text x="80" y="100" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#ff9966">HEX NUT</text><text x="80" y="155" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#7b879e">REAR AXLE NUT</text></svg>`},
+  "Front Axle":{tags:[{t:"STEEL SHAFT",c:"blue"},{t:"SLIDES LEFT",c:"blue"},{t:"TAP WITH MALLET",c:""}],svg:`<svg viewBox="0 0 300 80" width="280"><rect x="10" y="30" width="260" height="20" rx="10" fill="#3366cc"/><rect x="10" y="33" width="260" height="7" rx="0" fill="#5588ee" opacity=".35"/><circle cx="10" cy="40" r="18" fill="#4477dd" stroke="#3b9eff" stroke-width="2"/><rect x="258" y="26" width="14" height="28" rx="3" fill="#ffcc00"/><text x="150" y="68" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#3b9eff">FRONT AXLE SHAFT</text><text x="10" y="72" font-family="Share Tech Mono,monospace" font-size="18" fill="#3bffb0">←</text><text x="10" y="20" font-family="Share Tech Mono,monospace" font-size="9" fill="#3bffb0">TAP THIS END</text></svg>`},
+  "Rear Axle":{tags:[{t:"STEEL SHAFT",c:"amber"},{t:"SLIDES RIGHT→LEFT",c:"amber"},{t:"TAP FROM RIGHT",c:""}],svg:`<svg viewBox="0 0 300 80" width="280"><rect x="30" y="30" width="260" height="20" rx="10" fill="#883300"/><rect x="30" y="33" width="260" height="7" rx="0" fill="#cc5500" opacity=".35"/><circle cx="280" cy="40" r="18" fill="#aa4400" stroke="#ff7c3b" stroke-width="2"/><rect x="28" y="26" width="14" height="28" rx="3" fill="#ffcc00"/><text x="150" y="68" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#ff7c3b">REAR AXLE SHAFT</text><text x="268" y="72" font-family="Share Tech Mono,monospace" font-size="9" fill="#3bffb0">TAP THIS END →</text></svg>`},
+  "Front Brake Caliper":{tags:[{t:"SINGLE PISTON",c:"blue"},{t:"LEFT FORK",c:"blue"},{t:"2x 12mm BOLTS",c:""}],svg:`<svg viewBox="0 0 200 160" width="185"><rect x="25" y="28" width="115" height="85" rx="8" fill="#1e2a40" stroke="#3b9eff" stroke-width="2.5"/><rect x="34" y="40" width="97" height="30" rx="4" fill="#2a3a58"/><rect x="48" y="74" width="70" height="30" rx="4" fill="#1a2535"/><circle cx="52" cy="50" r="10" fill="#3b9eff" opacity=".7"/><circle cx="118" cy="50" r="10" fill="#3b9eff" opacity=".7"/><rect x="140" y="44" width="9" height="54" rx="3" fill="#4488cc"/><text x="83" y="20" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#3b9eff">FRONT CALIPER</text><text x="52" y="128" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#88aaff">12mm</text><text x="118" y="128" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#88aaff">12mm</text><text x="152" y="105" font-family="Share Tech Mono,monospace" font-size="8" fill="#88aaff">DISC</text></svg>`},
+  "Rear Brake Caliper":{tags:[{t:"SINGLE PISTON",c:"amber"},{t:"RIGHT SIDE",c:"amber"},{t:"2x 12mm BOLTS",c:""}],svg:`<svg viewBox="0 0 200 160" width="185"><rect x="25" y="28" width="115" height="85" rx="8" fill="#2a1808" stroke="#ff7c3b" stroke-width="2.5"/><rect x="34" y="40" width="97" height="30" rx="4" fill="#3a2010"/><rect x="48" y="74" width="70" height="30" rx="4" fill="#2a1808"/><circle cx="52" cy="50" r="10" fill="#ff7c3b" opacity=".7"/><circle cx="118" cy="50" r="10" fill="#ff7c3b" opacity=".7"/><rect x="140" y="44" width="9" height="54" rx="3" fill="#cc5500"/><text x="83" y="20" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#ff7c3b">REAR CALIPER</text><text x="52" y="128" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#ff9966">12mm</text><text x="118" y="128" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#ff9966">12mm</text><text x="152" y="105" font-family="Share Tech Mono,monospace" font-size="8" fill="#ff9966">DISC</text></svg>`},
+  "Front Brake Rotor":{tags:[{t:"298mm DISC",c:"blue"},{t:"6-BOLT PATTERN",c:"blue"},{t:"MIN 4.5mm THICK",c:""}],svg:`<svg viewBox="0 0 200 200" width="175"><circle cx="100" cy="100" r="88" fill="none" stroke="#3b9eff" stroke-width="5"/><circle cx="100" cy="100" r="65" fill="none" stroke="#2a3045" stroke-width="1" stroke-dasharray="5,4"/><circle cx="100" cy="100" r="42" fill="#1a2535" stroke="#2a3045" stroke-width="2"/><circle cx="100" cy="100" r="18" fill="#0f1117" stroke="#2a3045" stroke-width="2"/><rect x="96" y="14" width="8" height="18" rx="3" fill="#3b9eff" opacity=".5" transform="rotate(0,100,100)"/><rect x="96" y="14" width="8" height="18" rx="3" fill="#3b9eff" opacity=".5" transform="rotate(45,100,100)"/><rect x="96" y="14" width="8" height="18" rx="3" fill="#3b9eff" opacity=".5" transform="rotate(90,100,100)"/><rect x="96" y="14" width="8" height="18" rx="3" fill="#3b9eff" opacity=".5" transform="rotate(135,100,100)"/><rect x="96" y="14" width="8" height="18" rx="3" fill="#3b9eff" opacity=".5" transform="rotate(180,100,100)"/><rect x="96" y="14" width="8" height="18" rx="3" fill="#3b9eff" opacity=".5" transform="rotate(225,100,100)"/><rect x="96" y="14" width="8" height="18" rx="3" fill="#3b9eff" opacity=".5" transform="rotate(270,100,100)"/><rect x="96" y="14" width="8" height="18" rx="3" fill="#3b9eff" opacity=".5" transform="rotate(315,100,100)"/><circle cx="100" cy="43" r="7" fill="#ffcc00"/><circle cx="141" cy="65" r="7" fill="#ffcc00"/><circle cx="141" cy="135" r="7" fill="#ffcc00"/><circle cx="100" cy="157" r="7" fill="#ffcc00"/><circle cx="59" cy="135" r="7" fill="#ffcc00"/><circle cx="59" cy="65" r="7" fill="#ffcc00"/><text x="100" y="102" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#3b9eff">298mm</text><text x="100" y="115" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#7b879e">FRONT ROTOR</text></svg>`},
+  "Rear Brake Rotor":{tags:[{t:"282mm DISC",c:"amber"},{t:"6-BOLT PATTERN",c:"amber"},{t:"MIN 4.5mm THICK",c:""}],svg:`<svg viewBox="0 0 200 200" width="175"><circle cx="100" cy="100" r="88" fill="none" stroke="#ff7c3b" stroke-width="5"/><circle cx="100" cy="100" r="65" fill="none" stroke="#2a1808" stroke-width="1" stroke-dasharray="5,4"/><circle cx="100" cy="100" r="42" fill="#1e1008" stroke="#2a1808" stroke-width="2"/><circle cx="100" cy="100" r="18" fill="#0a0500" stroke="#2a1808" stroke-width="2"/><rect x="96" y="14" width="8" height="18" rx="3" fill="#ff7c3b" opacity=".5" transform="rotate(0,100,100)"/><rect x="96" y="14" width="8" height="18" rx="3" fill="#ff7c3b" opacity=".5" transform="rotate(45,100,100)"/><rect x="96" y="14" width="8" height="18" rx="3" fill="#ff7c3b" opacity=".5" transform="rotate(90,100,100)"/><rect x="96" y="14" width="8" height="18" rx="3" fill="#ff7c3b" opacity=".5" transform="rotate(135,100,100)"/><rect x="96" y="14" width="8" height="18" rx="3" fill="#ff7c3b" opacity=".5" transform="rotate(180,100,100)"/><rect x="96" y="14" width="8" height="18" rx="3" fill="#ff7c3b" opacity=".5" transform="rotate(225,100,100)"/><rect x="96" y="14" width="8" height="18" rx="3" fill="#ff7c3b" opacity=".5" transform="rotate(270,100,100)"/><rect x="96" y="14" width="8" height="18" rx="3" fill="#ff7c3b" opacity=".5" transform="rotate(315,100,100)"/><circle cx="100" cy="43" r="7" fill="#ffcc00"/><circle cx="141" cy="65" r="7" fill="#ffcc00"/><circle cx="141" cy="135" r="7" fill="#ffcc00"/><circle cx="100" cy="157" r="7" fill="#ffcc00"/><circle cx="59" cy="135" r="7" fill="#ffcc00"/><circle cx="59" cy="65" r="7" fill="#ffcc00"/><text x="100" y="102" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#ff7c3b">282mm</text><text x="100" y="115" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#7b879e">REAR ROTOR</text></svg>`},
+  "Cush Drive Dampers":{tags:[{t:"6x RUBBER BLOCKS",c:"amber"},{t:"INSIDE REAR HUB",c:"amber"},{t:"COUNT ALL 6!",c:"amber"}],svg:`<svg viewBox="0 0 200 200" width="175"><circle cx="100" cy="100" r="85" fill="none" stroke="#ff7c3b" stroke-width="3"/><circle cx="100" cy="100" r="55" fill="#1e1008" stroke="#cc5500" stroke-width="2"/><circle cx="100" cy="100" r="22" fill="#0a0500" stroke="#2a1808" stroke-width="2"/><rect x="62" y="46" width="22" height="35" rx="5" fill="#3bffb0" transform="rotate(0,100,100)"/><rect x="62" y="46" width="22" height="35" rx="5" fill="#3bffb0" transform="rotate(60,100,100)"/><rect x="62" y="46" width="22" height="35" rx="5" fill="#3bffb0" transform="rotate(120,100,100)"/><rect x="62" y="46" width="22" height="35" rx="5" fill="#3bffb0" transform="rotate(180,100,100)"/><rect x="62" y="46" width="22" height="35" rx="5" fill="#3bffb0" transform="rotate(240,100,100)"/><rect x="62" y="46" width="22" height="35" rx="5" fill="#3bffb0" transform="rotate(300,100,100)"/><text x="100" y="96" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#ff7c3b">CUSH DRIVE</text><text x="100" y="108" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#3bffb0">6x RUBBER</text><text x="100" y="188" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#ff3b3b">DON'T LOSE ANY!</text></svg>`},
+  "Drive Belt":{tags:[{t:"TOOTHED RUBBER",c:"green"},{t:"NO GREASE EVER",c:"amber"},{t:"GATES G-FORCE",c:""}],svg:`<svg viewBox="0 0 280 100" width="260"><rect x="10" y="34" width="260" height="32" rx="6" fill="#1a3010" stroke="#3bffb0" stroke-width="2"/><rect x="20" y="28" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="44" y="28" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="68" y="28" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="92" y="28" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="116" y="28" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="140" y="28" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="164" y="28" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="188" y="28" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="212" y="28" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="236" y="28" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="20" y="62" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="44" y="62" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="68" y="62" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="92" y="62" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="116" y="62" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="140" y="62" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="164" y="62" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="188" y="62" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="212" y="62" width="14" height="10" rx="2" fill="#3bffb0"/><rect x="236" y="62" width="14" height="10" rx="2" fill="#3bffb0"/><text x="140" y="90" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#3bffb0">TOOTHED DRIVE BELT</text></svg>`},
+  "Rear Drive Pulley":{tags:[{t:"TOOTHED PULLEY",c:"amber"},{t:"REAR WHEEL HUB",c:"amber"},{t:"BELT ENGAGES TEETH",c:""}],svg:`<svg viewBox="0 0 200 200" width="175"><circle cx="100" cy="100" r="82" fill="#1e1008" stroke="#ff7c3b" stroke-width="3"/><circle cx="100" cy="100" r="60" fill="#2a1808" stroke="#cc5500" stroke-width="2"/><circle cx="100" cy="100" r="24" fill="#0a0500" stroke="#ff7c3b" stroke-width="2"/><rect x="92" y="16" width="16" height="18" rx="3" fill="#3bffb0" transform="rotate(0,100,100)"/><rect x="92" y="16" width="16" height="18" rx="3" fill="#3bffb0" transform="rotate(24,100,100)"/><rect x="92" y="16" width="16" height="18" rx="3" fill="#3bffb0" transform="rotate(48,100,100)"/><rect x="92" y="16" width="16" height="18" rx="3" fill="#3bffb0" transform="rotate(72,100,100)"/><rect x="92" y="16" width="16" height="18" rx="3" fill="#3bffb0" transform="rotate(96,100,100)"/><rect x="92" y="16" width="16" height="18" rx="3" fill="#3bffb0" transform="rotate(120,100,100)"/><rect x="92" y="16" width="16" height="18" rx="3" fill="#3bffb0" transform="rotate(144,100,100)"/><rect x="92" y="16" width="16" height="18" rx="3" fill="#3bffb0" transform="rotate(168,100,100)"/><rect x="92" y="16" width="16" height="18" rx="3" fill="#3bffb0" transform="rotate(192,100,100)"/><rect x="92" y="16" width="16" height="18" rx="3" fill="#3bffb0" transform="rotate(216,100,100)"/><rect x="92" y="16" width="16" height="18" rx="3" fill="#3bffb0" transform="rotate(240,100,100)"/><rect x="92" y="16" width="16" height="18" rx="3" fill="#3bffb0" transform="rotate(264,100,100)"/><rect x="92" y="16" width="16" height="18" rx="3" fill="#3bffb0" transform="rotate(288,100,100)"/><rect x="92" y="16" width="16" height="18" rx="3" fill="#3bffb0" transform="rotate(312,100,100)"/><rect x="92" y="16" width="16" height="18" rx="3" fill="#3bffb0" transform="rotate(336,100,100)"/><text x="100" y="104" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#ff7c3b">REAR PULLEY</text></svg>`},
+  "Belt Adjuster Blocks":{tags:[{t:"SWINGARM END",c:"amber"},{t:"MATCH BOTH SIDES",c:"amber"},{t:"SETS BELT TENSION",c:""}],svg:`<svg viewBox="0 0 260 130" width="240"><rect x="50" y="45" width="180" height="40" rx="6" fill="#1a1808" stroke="#ff7c3b" stroke-width="1.5"/><rect x="60" y="50" width="75" height="30" rx="4" fill="#2a2010"/><rect x="68" y="54" width="52" height="22" rx="3" fill="#44aa22" stroke="#3bffb0" stroke-width="1.5"/><rect x="88" y="46" width="10" height="38" rx="3" fill="#aaccff"/><circle cx="93" cy="65" r="13" fill="#0a0800" stroke="#ffcc00" stroke-width="2"/><text x="93" y="69" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="8" fill="#ffcc00">AXLE</text><line x1="62" y1="90" x2="62" y2="104" stroke="#3bffb0" stroke-width="2"/><line x1="74" y1="90" x2="74" y2="104" stroke="#3bffb0" stroke-width="2"/><line x1="86" y1="90" x2="86" y2="104" stroke="#3bffb0" stroke-width="2"/><text x="80" y="118" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#3bffb0">THREAD MARKS — MUST MATCH</text><text x="190" y="68" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#ff7c3b">SWINGARM</text></svg>`},
+  "Front Axle Spacers":{tags:[{t:"ONE EACH SIDE",c:"blue"},{t:"MAY NOT MATCH",c:"amber"},{t:"BAG & LABEL L/R",c:""}],svg:`<svg viewBox="0 0 260 110" width="240"><rect x="15" y="22" width="44" height="66" rx="8" fill="#1e2a40" stroke="#3b9eff" stroke-width="2"/><circle cx="37" cy="55" r="14" fill="#0a0f1a" stroke="#3b9eff" stroke-width="2"/><text x="37" y="97" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#3b9eff">LEFT</text><rect x="201" y="22" width="44" height="66" rx="8" fill="#1e2a40" stroke="#3b9eff" stroke-width="2"/><circle cx="223" cy="55" r="14" fill="#0a0f1a" stroke="#3b9eff" stroke-width="2"/><text x="223" y="97" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#3b9eff">RIGHT</text><text x="130" y="36" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#ffcc00">FRONT AXLE SPACERS</text><text x="130" y="55" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#ff3b3b">MAY NOT BE IDENTICAL</text><text x="130" y="70" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#ff3b3b">LABEL EACH SIDE!</text></svg>`},
+  "Rear Axle Spacers":{tags:[{t:"ONE EACH SIDE",c:"amber"},{t:"LABEL L/R",c:"amber"},{t:"REAR HUB",c:""}],svg:`<svg viewBox="0 0 260 110" width="240"><rect x="15" y="22" width="44" height="66" rx="8" fill="#2a1808" stroke="#ff7c3b" stroke-width="2"/><circle cx="37" cy="55" r="14" fill="#0a0500" stroke="#ff7c3b" stroke-width="2"/><text x="37" y="97" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#ff7c3b">LEFT</text><rect x="201" y="22" width="44" height="66" rx="8" fill="#2a1808" stroke="#ff7c3b" stroke-width="2"/><circle cx="223" cy="55" r="14" fill="#0a0500" stroke="#ff7c3b" stroke-width="2"/><text x="223" y="97" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#ff7c3b">RIGHT</text><text x="130" y="36" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#ffcc00">REAR AXLE SPACERS</text><text x="130" y="60" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#ff3b3b">LABEL EACH SIDE!</text></svg>`},
+  "Loctite 243 Blue":{tags:[{t:"BLUE THREADLOCKER",c:"blue"},{t:"MEDIUM STRENGTH",c:""},{t:"ROTOR BOLTS",c:""}],svg:`<svg viewBox="0 0 110 210" width="85"><rect x="25" y="38" width="60" height="140" rx="10" fill="#1133cc"/><rect x="30" y="48" width="50" height="14" rx="3" fill="#fff" opacity=".18"/><text x="55" y="100" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#fff">LOCTITE</text><text x="55" y="118" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="20" fill="#ffcc00" font-weight="bold">243</text><text x="55" y="136" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#aaccff">MEDIUM STR</text><rect x="38" y="24" width="34" height="16" rx="5" fill="#0a1a55"/><rect x="64" y="18" width="10" height="12" rx="3" fill="#0a1066"/><text x="55" y="195" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#7b879e">BLUE BOTTLE</text></svg>`},
+  "Anti-Seize Compound":{tags:[{t:"SILVER PASTE",c:""},{t:"THREADS ONLY",c:"blue"},{t:"NOT ON BEARINGS",c:"amber"}],svg:`<svg viewBox="0 0 160 180" width="130"><rect x="35" y="28" width="90" height="120" rx="10" fill="#666"/><rect x="40" y="36" width="80" height="16" rx="3" fill="#999" opacity=".4"/><text x="80" y="88" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#eee">ANTI-SEIZE</text><text x="80" y="105" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#ddd">SILVER</text><text x="80" y="120" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#ddd">PASTE</text><rect x="30" y="144" width="100" height="20" rx="4" fill="#555"/><text x="80" y="158" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#ccc">THREADS ONLY</text><text x="80" y="175" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#7b879e">METALLIC TIN</text></svg>`},
+  "Brake Cleaner":{tags:[{t:"AEROSOL SPRAY",c:""},{t:"FLAMMABLE",c:"amber"},{t:"CLEAN ROTORS",c:"blue"}],svg:`<svg viewBox="0 0 100 200" width="80"><rect x="20" y="42" width="60" height="132" rx="12" fill="#cc2222"/><rect x="26" y="52" width="48" height="14" rx="3" fill="#fff" opacity=".2"/><text x="50" y="105" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#fff">BRAKE</text><text x="50" y="120" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#fff">CLEANER</text><text x="50" y="145" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="20" fill="#ffcc00">⚡</text><rect x="32" y="26" width="36" height="18" rx="6" fill="#aa1111"/><rect x="58" y="18" width="10" height="14" rx="3" fill="#881111"/><text x="50" y="188" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#7b879e">RED CAN</text></svg>`},
+  "Crush Washer":{tags:[{t:"ALUMINUM",c:""},{t:"SINGLE USE",c:"amber"},{t:"OIL DRAIN PLUG",c:""}],svg:`<svg viewBox="0 0 160 160" width="130"><circle cx="80" cy="80" r="62" fill="none" stroke="#aaa" stroke-width="16"/><circle cx="80" cy="80" r="46" fill="none" stroke="#ccc" stroke-width="3"/><circle cx="80" cy="80" r="20" fill="#0f1117" stroke="#777" stroke-width="2"/><text x="80" y="145" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#7b879e">CRUSH WASHER</text><text x="80" y="158" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#ffcc00">REPLACE EACH DRAIN</text></svg>`},
+  "Oil Filter":{tags:[{t:"SPIN-ON",c:"green"},{t:"HF204 / OEM",c:""},{t:"HAND + 3/4 TURN",c:""}],svg:`<svg viewBox="0 0 110 180" width="90"><rect x="20" y="28" width="70" height="118" rx="12" fill="#224400"/><rect x="26" y="38" width="58" height="18" rx="3" fill="#3bffb0" opacity=".3"/><text x="55" y="94" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#3bffb0">OIL</text><text x="55" y="108" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#3bffb0">FILTER</text><circle cx="55" cy="136" r="18" fill="#1a3008" stroke="#3bffb0" stroke-width="2"/><text x="55" y="140" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="8" fill="#3bffb0">BASE</text><text x="55" y="168" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#7b879e">GREEN CANISTER</text></svg>`},
+  "Kill Switch":{tags:[{t:"RIGHT HANDLEBAR",c:"amber"},{t:"RED ROCKER",c:"amber"},{t:"OFF BEFORE WORK",c:""}],svg:`<svg viewBox="0 0 180 110" width="165"><rect x="20" y="24" width="140" height="62" rx="12" fill="#1a1a1a" stroke="#888" stroke-width="2"/><rect x="36" y="36" width="108" height="38" rx="8" fill="#cc0000"/><rect x="44" y="44" width="92" height="22" rx="5" fill="#ee1111"/><text x="68" y="59" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#fff">OFF</text><text x="118" y="59" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#fff">RUN</text><line x1="92" y1="36" x2="92" y2="74" stroke="#800" stroke-width="2"/><text x="90" y="100" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#ff3b3b">KILL SWITCH — OFF FIRST</text></svg>`},
+  "Wheel Chock":{tags:[{t:"RUBBER WEDGE",c:""},{t:"FRONT & REAR",c:"blue"},{t:"BEFORE LIFTING",c:""}],svg:`<svg viewBox="0 0 220 120" width="200"><polygon points="20,100 200,100 180,38 40,38" fill="#ff7c3b" opacity=".85"/><polygon points="30,98 190,98 172,44 48,44" fill="#cc5500"/><line x1="55" y1="72" x2="165" y2="72" stroke="#ffcc00" stroke-width="2" stroke-dasharray="8,5"/><text x="110" y="76" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#ffcc00">TIRE SITS HERE</text><text x="110" y="115" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#7b879e">WHEEL CHOCK</text></svg>`},
+  "Brake Line / Banjo Fitting":{tags:[{t:"RUBBER HOSE",c:"blue"},{t:"BANJO BOLT ENDS",c:""},{t:"NEVER HANG CALIPER",c:"amber"}],svg:`<svg viewBox="0 0 220 140" width="200"><path d="M 22 70 Q 80 18 160 52 Q 185 62 192 72" stroke="#4488cc" stroke-width="14" fill="none" stroke-linecap="round"/><circle cx="22" cy="70" r="18" fill="#2244aa" stroke="#3b9eff" stroke-width="2"/><circle cx="22" cy="70" r="9" fill="#0f1520"/><circle cx="192" cy="72" r="18" fill="#2244aa" stroke="#3b9eff" stroke-width="2"/><circle cx="192" cy="72" r="9" fill="#0f1520"/><text x="110" y="108" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#3b9eff">BRAKE LINE</text><text x="22" y="102" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="8" fill="#88aaff">BANJO</text><text x="192" y="104" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="8" fill="#88aaff">BANJO</text><text x="110" y="126" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#ffcc00">DON'T KINK OR STRESS</text></svg>`},
+  "Front Fender":{tags:[{t:"CHROME STEEL",c:"blue"},{t:"STAYS ON",c:"green"},{t:"ANGLE WHEEL OUT",c:""}],svg:`<svg viewBox="0 0 220 140" width="200"><path d="M 16 120 Q 30 38 110 18 Q 190 38 204 120" fill="none" stroke="#c0c0cc" stroke-width="14" stroke-linecap="round"/><path d="M 28 118 Q 40 48 110 30 Q 180 48 192 118" fill="none" stroke="#e0e0f0" stroke-width="4" stroke-linecap="round" opacity=".35"/><circle cx="30" cy="112" r="7" fill="#3b9eff"/><circle cx="190" cy="112" r="7" fill="#3b9eff"/><text x="110" y="136" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#c0c0cc">FRONT FENDER</text><text x="110" y="14" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#3bffb0">NO REMOVAL NEEDED</text></svg>`},
+  "Front Wheel Assembly":{tags:[{t:"TIRE + HUB",c:"blue"},{t:"SINGLE DISC SIDE",c:"blue"},{t:"NO ABS",c:"green"}],svg:`<svg viewBox="0 0 200 200" width="175"><circle cx="100" cy="100" r="90" fill="none" stroke="#555" stroke-width="20"/><circle cx="100" cy="100" r="80" fill="none" stroke="#3b9eff" stroke-width="3"/><circle cx="100" cy="100" r="42" fill="#1e2535" stroke="#2a3045" stroke-width="3"/><circle cx="100" cy="100" r="16" fill="#0f1117" stroke="#3b9eff" stroke-width="2"/><line x1="100" y1="58" x2="100" y2="84" stroke="#3b9eff" stroke-width="2" opacity=".6"/><line x1="100" y1="116" x2="100" y2="142" stroke="#3b9eff" stroke-width="2" opacity=".6"/><line x1="58" y1="100" x2="84" y2="100" stroke="#3b9eff" stroke-width="2" opacity=".6"/><line x1="116" y1="100" x2="142" y2="100" stroke="#3b9eff" stroke-width="2" opacity=".6"/><line x1="71" y1="71" x2="89" y2="89" stroke="#3b9eff" stroke-width="2" opacity=".6"/><line x1="111" y1="111" x2="129" y2="129" stroke="#3b9eff" stroke-width="2" opacity=".6"/><line x1="129" y1="71" x2="111" y2="89" stroke="#3b9eff" stroke-width="2" opacity=".6"/><line x1="71" y1="129" x2="89" y2="111" stroke="#3b9eff" stroke-width="2" opacity=".6"/><text x="100" y="104" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#3b9eff">FRONT WHEEL</text></svg>`},
+  "Axle Flat Washer":{tags:[{t:"FLAT STEEL",c:""},{t:"BETWEEN NUT & FORK",c:"blue"},{t:"DON'T LOSE",c:"amber"}],svg:`<svg viewBox="0 0 160 160" width="130"><circle cx="80" cy="80" r="58" fill="none" stroke="#9999bb" stroke-width="14"/><circle cx="80" cy="80" r="44" fill="none" stroke="#aaaacc" stroke-width="3"/><circle cx="80" cy="80" r="18" fill="#0f1117" stroke="#666" stroke-width="2"/><text x="80" y="148" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#7b879e">FLAT WASHER</text></svg>`},
+  "Torque Wrench":{tags:[{t:"CLICK TYPE",c:""},{t:"0-150 FT-LB",c:"blue"},{t:"ESSENTIAL",c:"blue"}],svg:`<svg viewBox="0 0 80 280" width="65"><rect x="28" y="32" width="24" height="185" rx="9" fill="#2a3045" stroke="#3b9eff" stroke-width="1.5"/><rect x="28" y="82" width="24" height="4" rx="1" fill="#3b9eff" opacity=".3"/><rect x="28" y="95" width="24" height="4" rx="1" fill="#3b9eff" opacity=".3"/><rect x="28" y="108" width="24" height="4" rx="1" fill="#3b9eff" opacity=".3"/><rect x="28" y="121" width="24" height="4" rx="1" fill="#3b9eff" opacity=".3"/><rect x="28" y="134" width="24" height="4" rx="1" fill="#3b9eff" opacity=".3"/><rect x="22" y="18" width="36" height="20" rx="5" fill="#1a2a40" stroke="#3b9eff" stroke-width="2"/><circle cx="40" cy="18" r="10" fill="#1a2a40" stroke="#3b9eff" stroke-width="2"/><rect x="30" y="52" width="20" height="18" rx="2" fill="#0f1520" stroke="#88aaff" stroke-width="1"/><text x="40" y="64" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="7" fill="#3bffb0">FT-LB</text><text x="40" y="258" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#3b9eff">TORQUE</text><text x="40" y="270" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#3b9eff">WRENCH</text></svg>`},
+  "Breaker Bar":{tags:[{t:"1/2\" DRIVE",c:""},{t:"HIGH TORQUE",c:"amber"},{t:"BREAK AXLE NUTS",c:""}],svg:`<svg viewBox="0 0 280 80" width="260"><rect x="18" y="30" width="220" height="18" rx="9" fill="#2a3045" stroke="#7b879e" stroke-width="1.5"/><rect x="10" y="22" width="36" height="34" rx="7" fill="#1e2535" stroke="#88aaff" stroke-width="2"/><rect x="18" y="32" width="18" height="14" rx="2" fill="#3b9eff" opacity=".4"/><text x="140" y="22" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#7b879e">BREAKER BAR — 1/2" DRIVE</text><text x="140" y="68" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#ffcc00">USE TO CRACK TIGHT AXLE NUTS</text></svg>`},
+  "Rubber Mallet":{tags:[{t:"DEAD-BLOW",c:""},{t:"USE WITH DOWEL",c:"green"},{t:"TAP AXLE OUT",c:""}],svg:`<svg viewBox="0 0 180 160" width="160"><rect x="42" y="18" width="96" height="58" rx="9" fill="#222" stroke="#888" stroke-width="2"/><rect x="50" y="26" width="80" height="18" rx="3" fill="#333"/><rect x="84" y="76" width="22" height="72" rx="7" fill="#555" stroke="#888" stroke-width="1.5"/><text x="90" y="52" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#aaa">RUBBER</text><text x="90" y="68" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#aaa">MALLET</text><text x="90" y="155" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#3bffb0">USE WITH WOODEN DOWEL</text></svg>`},
+  "Snap-Ring Pliers":{tags:[{t:"INTERNAL/EXTERNAL",c:""},{t:"BEARING RETAINERS",c:"blue"},{t:"METRIC",c:""}],svg:`<svg viewBox="0 0 180 200" width="160"><rect x="84" y="18" width="12" height="90" rx="4" fill="#555"/><rect x="84" y="18" width="12" height="90" rx="4" fill="#666" opacity=".5"/><circle cx="90" cy="100" r="12" fill="#888" stroke="#aaa" stroke-width="1"/><path d="M 84 112 Q 55 148 46 172" stroke="#555" stroke-width="10" fill="none" stroke-linecap="round"/><path d="M 96 112 Q 125 148 134 172" stroke="#666" stroke-width="10" fill="none" stroke-linecap="round"/><circle cx="47" cy="172" r="7" fill="#3b9eff"/><circle cx="133" cy="172" r="7" fill="#3b9eff"/><text x="90" y="196" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#7b879e">SNAP-RING PLIERS</text></svg>`},
+  "Needle-Nose Pliers":{tags:[{t:"LONG JAW",c:""},{t:"SMALL CLIPS",c:"blue"},{t:"COTTER PINS",c:""}],svg:`<svg viewBox="0 0 90 250" width="75"><rect x="38" y="18" width="10" height="96" rx="3" fill="#555"/><rect x="42" y="18" width="10" height="96" rx="3" fill="#666"/><circle cx="45" cy="110" r="11" fill="#888"/><path d="M 38 120 L 30 210" stroke="#555" stroke-width="8" stroke-linecap="round"/><path d="M 52 120 L 60 210" stroke="#666" stroke-width="8" stroke-linecap="round"/><line x1="30" y1="210" x2="60" y2="210" stroke="#3b9eff" stroke-width="2.5"/><text x="45" y="236" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#7b879e">NEEDLE-NOSE</text></svg>`},
+  "Bearing Grease":{tags:[{t:"WHEEL BEARINGS",c:"blue"},{t:"NOT ON AXLE THREADS",c:"amber"},{t:"LITHIUM GREASE",c:""}],svg:`<svg viewBox="0 0 150 165" width="125"><rect x="25" y="38" width="100" height="100" rx="12" fill="#1a3010" stroke="#3bffb0" stroke-width="2"/><rect x="32" y="48" width="86" height="18" rx="3" fill="#3bffb0" opacity=".3"/><text x="75" y="96" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#3bffb0">WHEEL</text><text x="75" y="110" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#3bffb0">BEARING</text><text x="75" y="124" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#3bffb0">GREASE</text><rect x="20" y="134" width="110" height="18" rx="4" fill="#112208"/><text x="75" y="158" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#7b879e">SILVER/GREEN TUB</text></svg>`},
+  "Floor Jack":{tags:[{t:"HYDRAULIC",c:""},{t:"2-TON MIN",c:"amber"},{t:"FRAME ONLY",c:"amber"}],svg:`<svg viewBox="0 0 240 138" width="220"><rect x="24" y="58" width="168" height="40" rx="8" fill="#2a3045" stroke="#7b879e" stroke-width="2"/><rect x="88" y="42" width="56" height="22" rx="5" fill="#3b9eff" opacity=".7"/><circle cx="50" cy="104" r="16" fill="#1e2535" stroke="#7b879e" stroke-width="2"/><circle cx="180" cy="104" r="16" fill="#1e2535" stroke="#7b879e" stroke-width="2"/><rect x="192" y="60" width="7" height="64" rx="3" fill="#555"/><rect x="199" y="60" width="34" height="7" rx="3" fill="#555"/><text x="106" y="85" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#7b879e">FLOOR JACK</text><text x="110" y="130" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#ffcc00">FRAME CROSS-MEMBER ONLY</text></svg>`},
+  "Center Lift Stand":{tags:[{t:"SCISSOR PLATFORM",c:"amber"},{t:"HARBOR FREIGHT",c:""},{t:"FRAME CROSS-MEMBER",c:"amber"}],svg:`<svg viewBox="0 0 240 158" width="220"><rect x="58" y="28" width="124" height="18" rx="4" fill="#ff7c3b"/><line x1="88" y1="46" x2="68" y2="122" stroke="#ff7c3b" stroke-width="8" stroke-linecap="round"/><line x1="152" y1="46" x2="172" y2="122" stroke="#ff7c3b" stroke-width="8" stroke-linecap="round"/><line x1="88" y1="46" x2="172" y2="122" stroke="#cc5500" stroke-width="6" stroke-linecap="round" opacity=".7"/><line x1="152" y1="46" x2="68" y2="122" stroke="#cc5500" stroke-width="6" stroke-linecap="round" opacity=".7"/><rect x="48" y="122" width="144" height="14" rx="4" fill="#d66520"/><rect x="38" y="136" width="164" height="8" rx="3" fill="#cc5500"/><text x="120" y="18" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#ff7c3b">CENTER LIFT STAND</text><text x="120" y="154" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#ffcc00">CONTACT: FRAME CROSS-MEMBER</text></svg>`},
+  "27mm Socket":{tags:[{t:"1/2\" DRIVE",c:"blue"},{t:"FRONT AXLE NUT",c:"blue"},{t:"USE DEEP SOCKET",c:""}],svg:`<svg viewBox="0 0 110 190" width="88"><rect x="28" y="38" width="54" height="114" rx="9" fill="#1e2a40" stroke="#3b9eff" stroke-width="2"/><polygon points="55,155 28,144 28,164 55,174 82,164 82,144" fill="#1a2535"/><circle cx="55" cy="60" r="20" fill="#0a0f1a" stroke="#88aaff" stroke-width="2"/><rect x="40" y="38" width="30" height="14" rx="4" fill="#3b9eff" opacity=".4"/><text x="55" y="65" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="14" fill="#3b9eff">27</text><text x="55" y="80" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#3b9eff">mm</text><text x="55" y="186" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#7b879e">1/2" DRIVE</text></svg>`},
+  "24mm Socket":{tags:[{t:"1/2\" DRIVE",c:"amber"},{t:"REAR AXLE NUT",c:"amber"},{t:"USE DEEP SOCKET",c:""}],svg:`<svg viewBox="0 0 110 190" width="88"><rect x="28" y="38" width="54" height="114" rx="9" fill="#2a1808" stroke="#ff7c3b" stroke-width="2"/><polygon points="55,155 28,144 28,164 55,174 82,164 82,144" fill="#1e1008"/><circle cx="55" cy="60" r="20" fill="#0a0500" stroke="#ff9966" stroke-width="2"/><rect x="40" y="38" width="30" height="14" rx="4" fill="#ff7c3b" opacity=".4"/><text x="55" y="65" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="14" fill="#ff7c3b">24</text><text x="55" y="80" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#ff7c3b">mm</text><text x="55" y="186" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#7b879e">1/2" DRIVE</text></svg>`},
+  "12mm Socket":{tags:[{t:"3/8\" DRIVE",c:""},{t:"CALIPER BOLTS",c:"blue"},{t:"ADJUSTER NUTS",c:""}],svg:`<svg viewBox="0 0 110 190" width="88"><rect x="28" y="38" width="54" height="114" rx="9" fill="#1e2535" stroke="#7b879e" stroke-width="2"/><polygon points="55,155 28,144 28,164 55,174 82,164 82,144" fill="#151c27"/><circle cx="55" cy="60" r="20" fill="#0f1117" stroke="#aaa" stroke-width="2"/><rect x="40" y="38" width="30" height="14" rx="4" fill="#7b879e" opacity=".4"/><text x="55" y="65" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="14" fill="#dde3f0">12</text><text x="55" y="80" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#dde3f0">mm</text><text x="55" y="186" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#7b879e">3/8" DRIVE</text></svg>`},
+  "10mm Socket":{tags:[{t:"3/8\" DRIVE",c:""},{t:"ROTOR BOLTS",c:"blue"},{t:"MOST COMMON SIZE",c:""}],svg:`<svg viewBox="0 0 110 190" width="88"><rect x="28" y="38" width="54" height="114" rx="9" fill="#1e2535" stroke="#7b879e" stroke-width="2"/><polygon points="55,155 28,144 28,164 55,174 82,164 82,144" fill="#151c27"/><circle cx="55" cy="60" r="20" fill="#0f1117" stroke="#aaa" stroke-width="2"/><rect x="40" y="38" width="30" height="14" rx="4" fill="#7b879e" opacity=".4"/><text x="55" y="65" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="14" fill="#dde3f0">10</text><text x="55" y="80" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#dde3f0">mm</text><text x="55" y="186" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#7b879e">3/8" DRIVE</text></svg>`},
+  "Impact Wrench":{tags:[{t:"1/2\" DRIVE",c:""},{t:"HIGH TORQUE",c:"amber"},{t:"FAST NUT REMOVAL",c:""}],svg:`<svg viewBox="0 0 140 200" width="120"><rect x="48" y="18" width="44" height="120" rx="10" fill="#2a3045" stroke="#7b879e" stroke-width="2"/><rect x="38" y="48" width="20" height="54" rx="8" fill="#1e2535" stroke="#7b879e" stroke-width="1.5"/><rect x="55" y="138" width="14" height="30" rx="4" fill="#3b9eff" opacity=".7"/><text x="70" y="86" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#7b879e">IMPACT</text><text x="70" y="100" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#7b879e">WRENCH</text><text x="70" y="195" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#ffcc00">FAST AXLE NUT REMOVAL</text></svg>`},
+  "Wire Brush":{tags:[{t:"STEEL BRISTLES",c:""},{t:"CLEAN THREADS",c:"blue"},{t:"MATING SURFACES",c:""}],svg:`<svg viewBox="0 0 200 100" width="180"><rect x="10" y="38" width="120" height="24" rx="8" fill="#555" stroke="#888" stroke-width="1.5"/><rect x="100" y="44" width="80" height="12" rx="4" fill="#888"/><rect x="18" y="62" width="8" height="20" rx="1" fill="#aaa"/><rect x="30" y="62" width="8" height="20" rx="1" fill="#aaa"/><rect x="42" y="62" width="8" height="20" rx="1" fill="#aaa"/><rect x="54" y="62" width="8" height="20" rx="1" fill="#aaa"/><rect x="66" y="62" width="8" height="20" rx="1" fill="#aaa"/><rect x="78" y="62" width="8" height="20" rx="1" fill="#aaa"/><rect x="90" y="62" width="8" height="20" rx="1" fill="#aaa"/><text x="100" y="30" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#7b879e">WIRE BRUSH — CLEAN THREADS</text></svg>`},
+  "Oil Drain Pan":{tags:[{t:"4+ QUART",c:""},{t:"OIL CHANGE",c:"green"},{t:"UNDER ENGINE FIRST",c:""}],svg:`<svg viewBox="0 0 220 120" width="200"><ellipse cx="110" cy="92" rx="92" ry="20" fill="#1a3010" stroke="#3bffb0" stroke-width="2"/><rect x="18" y="52" width="184" height="40" rx="4" fill="#1a3010"/><ellipse cx="110" cy="52" rx="92" ry="18" fill="#224418" stroke="#3bffb0" stroke-width="2"/><text x="110" y="76" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#3bffb0">OIL DRAIN PAN</text><text x="110" y="114" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#ffcc00">PLACE BEFORE REMOVING DRAIN PLUG</text></svg>`},
+  "Allen / Hex Key Set":{tags:[{t:"METRIC",c:""},{t:"6mm / 8mm NEEDED",c:"blue"},{t:"L-SHAPE",c:""}],svg:`<svg viewBox="0 0 220 110" width="200"><rect x="18" y="42" width="64" height="10" rx="3" fill="#888"/><rect x="18" y="42" width="10" height="52" rx="3" fill="#888"/><text x="50" y="106" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#aaa">6mm</text><rect x="110" y="32" width="76" height="10" rx="3" fill="#aaa"/><rect x="110" y="32" width="10" height="62" rx="3" fill="#aaa"/><text x="148" y="106" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#aaa">8mm</text><text x="110" y="20" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#3b9eff">HEX / ALLEN KEYS</text></svg>`}
+};
+
+const modal=document.getElementById('part-modal');
+const modalName=document.getElementById('modal-part-name');
+const modalVis=document.getElementById('modal-visual');
+const modalDesc=document.getElementById('modal-desc');
+const modalTags=document.getElementById('modal-tags');
+const closeBtn=document.getElementById('modal-close');
+
+function openModal(partName,partCtx){
+  modal.classList.add('open');
+  document.body.style.overflow='hidden';
+  modalName.textContent=partName;
+  modalDesc.textContent='';
+  modalTags.innerHTML='';
+  const known=PARTS[partName];
+  if(known){
+    modalVis.innerHTML=known.svg;
+    known.tags.forEach(tag=>{
+      const s=document.createElement('span');
+      s.className='modal-tag'+(tag.c?' '+tag.c:'');
+      s.textContent=tag.t;
+      modalTags.appendChild(s);
+    });
+  } else {
+    modalVis.innerHTML='<div id="modal-loading"><div class="spinner"></div><span>Loading…</span></div>';
+  }
+  fetchDesc(partName,partCtx,!!known);
+}
+
+async function fetchDesc(partName,partCtx,hasSvg){
+  try{
+    const r=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-6",
+        max_tokens:1000,
+        messages:[{role:"user",content:`You are a motorcycle mechanic assistant for a 2014 Yamaha V-Star 950 Touring (XVS950CT). The user tapped on: "${partName}". Context: ${partCtx}. Write 2-3 sentences: what it looks like physically, what it does, and one quick handling tip for this job. Plain text only, no markdown, no lists.`}]
+      })
+    });
+    const d=await r.json();
+    const txt=d.content?.map(b=>b.text||'').join('').trim()||'No description available.';
+    modalDesc.textContent=txt;
+    if(!hasSvg){
+      modalVis.innerHTML=`<svg viewBox="0 0 200 130" width="180"><rect x="24" y="18" width="152" height="94" rx="12" fill="#1e2535" stroke="#3b9eff" stroke-width="2"/><text x="100" y="62" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="12" fill="#3b9eff">${partName.split(' ').slice(0,3).join(' ')}</text><text x="100" y="80" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#7b879e">V-Star 950 · 2014</text></svg>`;
+      const tag=document.createElement('span');
+      tag.className='modal-tag blue';
+      tag.textContent='V-STAR 950';
+      modalTags.appendChild(tag);
+    }
+  }catch(e){
+    modalDesc.textContent='Could not load description. Check internet connection.';
+  }
+}
+
+function closeModal(){modal.classList.remove('open');document.body.style.overflow='';}
+closeBtn.addEventListener('click',closeModal);
+modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+document.querySelectorAll('.part-chip').forEach(chip=>{
+  chip.addEventListener('click',()=>openModal(chip.dataset.part,chip.dataset.ctx));
+});
+</script>
+</body>
+</html>
