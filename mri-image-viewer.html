@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MRI Image Viewer</title>
+<style>
+  :root{
+    --bg:#F6F4EF; --surface:#FFFFFF; --surface-2:#FBF9F4; --border:#E3DFD2;
+    --text:#262A2E; --text-secondary:#5B6066; --text-muted:#8A8F93;
+    --accent:#2B6E76; --accent-strong:#1F545B; --accent-soft:rgba(43,110,118,0.10);
+    --viewer-bg:#0B0D0E;
+    --disclaimer-bg:#FFF6E3; --disclaimer-border:#E4B95E; --disclaimer-text:#6B4E14;
+    --shadow:0 1px 2px rgba(30,30,20,0.05), 0 10px 28px -14px rgba(30,30,20,0.22);
+    --font-serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Georgia,serif;
+    --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  :root[data-theme="dark"]{
+    --bg:#14181A; --surface:#1B2023; --surface-2:#20262A; --border:#2E3538;
+    --text:#ECEAE4; --text-secondary:#ABB1B3; --text-muted:#7C8285;
+    --accent:#67C6CD; --accent-strong:#8FDBE0; --accent-soft:rgba(103,198,205,0.16);
+    --viewer-bg:#000000;
+    --disclaimer-bg:#2A2314; --disclaimer-border:#6B5324; --disclaimer-text:#EAC97C;
+    --shadow:0 1px 2px rgba(0,0,0,0.5), 0 10px 28px -14px rgba(0,0,0,0.7);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#14181A; --surface:#1B2023; --surface-2:#20262A; --border:#2E3538;
+      --text:#ECEAE4; --text-secondary:#ABB1B3; --text-muted:#7C8285;
+      --accent:#67C6CD; --accent-strong:#8FDBE0; --accent-soft:rgba(103,198,205,0.16);
+      --viewer-bg:#000000;
+      --disclaimer-bg:#2A2314; --disclaimer-border:#6B5324; --disclaimer-text:#EAC97C;
+      --shadow:0 1px 2px rgba(0,0,0,0.5), 0 10px 28px -14px rgba(0,0,0,0.7);
+    }
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{ background:var(--bg); color:var(--text); font-family:var(--font-sans); line-height:1.5; -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:1120px; margin:0 auto; padding:28px 20px 56px; }
+
+  header.app-header{ display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:14px; }
+  h1{ font-family:var(--font-serif); font-weight:600; font-size:clamp(1.4rem, 1.1rem + 1vw, 1.9rem); margin:0 0 4px; letter-spacing:0.2px; text-wrap:balance; }
+  .subtitle{ color:var(--text-secondary); font-size:0.92rem; margin:0; }
+  .back-link{ font-size:0.82rem; color:var(--accent); text-decoration:none; border:1px solid var(--border); padding:6px 12px; border-radius:999px; background:var(--surface); box-shadow:var(--shadow); white-space:nowrap; }
+  .back-link:hover{ border-color:var(--accent); }
+
+  .disclaimer{ display:flex; gap:10px; align-items:flex-start; background:var(--disclaimer-bg); border:1px solid var(--disclaimer-border); color:var(--disclaimer-text); border-radius:10px; padding:11px 14px; font-size:0.83rem; margin-bottom:20px; }
+  .disclaimer .icon{ flex:0 0 auto; }
+
+  .card{ background:var(--surface); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow); padding:18px; }
+
+  .picker-row{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+  .picker-btn{
+    font-family:var(--font-sans); font-size:0.82rem; font-variant-numeric:tabular-nums;
+    padding:7px 13px; border-radius:999px; border:1px solid var(--border); background:var(--surface-2);
+    color:var(--text-secondary); cursor:pointer;
+  }
+  .picker-btn:hover{ border-color:var(--accent); color:var(--accent-strong); }
+  .picker-btn.active{ background:var(--accent); border-color:var(--accent); color:#fff; font-weight:700; }
+  .picker-label{ font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); font-weight:700; margin:0 0 8px; }
+
+  .viewer-area{ display:grid; grid-template-columns: 1fr 220px; gap:18px; margin-top:16px; }
+  @media (max-width: 760px){ .viewer-area{ grid-template-columns:1fr; } }
+
+  .image-stage{
+    background:var(--viewer-bg); border-radius:12px; overflow:hidden; position:relative;
+    aspect-ratio:1/1; display:flex; align-items:center; justify-content:center;
+    cursor: grab; touch-action:none;
+  }
+  .image-stage.panning{ cursor:grabbing; }
+  .image-stage img{ max-width:100%; max-height:100%; user-select:none; -webkit-user-drag:none; will-change:transform; }
+  .stage-hint{ position:absolute; bottom:8px; right:10px; font-size:0.68rem; color:rgba(255,255,255,0.55); pointer-events:none; }
+  .slice-count{ position:absolute; top:8px; left:10px; font-size:0.72rem; color:rgba(255,255,255,0.75); font-variant-numeric:tabular-nums; background:rgba(0,0,0,0.35); padding:2px 8px; border-radius:999px; }
+  .no-image{ color:var(--text-muted); font-size:0.85rem; }
+
+  .slice-controls{ display:flex; align-items:center; gap:10px; margin-top:12px; }
+  .slice-controls input[type="range"]{ flex:1 1 auto; accent-color: var(--accent); }
+  .step-btn{ width:32px; height:32px; border-radius:50%; border:1px solid var(--border); background:var(--surface-2); color:var(--text-secondary); cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; flex:0 0 auto; }
+  .step-btn:hover{ color:var(--accent); border-color:var(--accent); }
+  .step-btn:disabled{ opacity:0.35; cursor:default; }
+
+  .side-panel{ display:flex; flex-direction:column; gap:14px; }
+  .side-panel h3{ font-size:0.72rem; text-transform:uppercase; letter-spacing:0.09em; color:var(--text-muted); font-weight:700; margin:0 0 8px; }
+  .zoom-row{ display:flex; align-items:center; gap:8px; }
+  .zoom-row input[type="range"]{ flex:1 1 auto; accent-color:var(--accent); }
+  .zoom-reset{ font-size:0.75rem; color:var(--accent); background:none; border:none; cursor:pointer; padding:0; text-decoration:underline; text-underline-offset:2px; }
+  .meta-line{ font-size:0.82rem; color:var(--text-secondary); display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px dashed var(--border); }
+  .meta-line:last-child{ border-bottom:none; }
+  .meta-line b{ color:var(--text); font-weight:700; }
+
+  #theme-toggle{ flex:0 0 auto; width:36px; height:36px; border-radius:50%; border:1px solid var(--border); background:var(--surface); color:var(--text-secondary); cursor:pointer; font-size:0.95rem; display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow); }
+  .header-actions{ display:flex; align-items:center; gap:10px; }
+  footer{ margin-top:26px; color:var(--text-muted); font-size:0.78rem; text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="app-header">
+    <div>
+      <h1>MRI Image Viewer</h1>
+      <p class="subtitle">Raw slice images from your lumbar spine exams · 2015–2026</p>
+    </div>
+    <div class="header-actions">
+      <a class="back-link" href="lumbar-spine-progression.html">← Severity overview</a>
+      <button id="theme-toggle" type="button" aria-label="Toggle light/dark theme" title="Toggle theme">◐</button>
+    </div>
+  </header>
+
+  <div class="disclaimer">
+    <span class="icon">ℹ</span>
+    <div>These are unannotated source images, shown for your own reference only. They are not a diagnostic tool. Discuss all findings with your doctor or a spine specialist.</div>
+  </div>
+
+  <div class="card">
+    <p class="picker-label">Exam date</p>
+    <div class="picker-row" id="date-picker" role="group" aria-label="Select exam date"></div>
+
+    <p class="picker-label">Sequence</p>
+    <div class="picker-row" id="seq-picker" role="group" aria-label="Select image sequence"></div>
+
+    <div class="viewer-area">
+      <div>
+        <div class="image-stage" id="stage">
+          <img id="slice-img" src="" alt="MRI slice" draggable="false">
+          <span class="slice-count" id="slice-count"></span>
+          <span class="stage-hint">scroll to zoom · drag to pan</span>
+        </div>
+        <div class="slice-controls">
+          <button class="step-btn" id="slice-prev" type="button" aria-label="Previous slice">‹</button>
+          <input type="range" id="slice-slider" min="0" max="0" value="0" step="1" aria-label="Slice position">
+          <button class="step-btn" id="slice-next" type="button" aria-label="Next slice">›</button>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div>
+          <h3>Zoom</h3>
+          <div class="zoom-row">
+            <input type="range" id="zoom-slider" min="1" max="4" value="1" step="0.1" aria-label="Zoom level">
+            <button class="zoom-reset" id="zoom-reset" type="button">Reset</button>
+          </div>
+        </div>
+        <div>
+          <h3>Details</h3>
+          <div class="meta-line"><span>Date</span><b id="meta-date">—</b></div>
+          <div class="meta-line"><span>Sequence</span><b id="meta-seq">—</b></div>
+          <div class="meta-line"><span>Slice</span><b id="meta-slice">—</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Image files loaded from the <code>mri-images/</code> folder next to this file. Keep both together when moving or sharing.</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var MANIFEST = {
+    "2015-05-01": { "SAG_T1":13, "SAG_T2":13, "SAG_STIR":13, "AXIAL_T1":29, "AXIAL_T2":29 },
+    "2017-03-29": { "SAG_T1":12, "SAG_T2":12, "AXIAL_T1":23, "AXIAL_T2":23 },
+    "2017-09-25": { "SAG_T1":18, "SAG_T2":18, "AXIAL_T1":24, "AXIAL_T2":24 },
+    "2020-02-13": { "SAG_T1":19, "SAG_T2":19, "AXIAL_T2":42 },
+    "2021-10-05": { "SAG_T1":23, "SAG_T2":23, "AXIAL_T2":50 },
+    "2025-04-03": { "SAG_T1":19, "SAG_T2":19, "SAG_STIR":19, "AXIAL_T2":38 },
+    "2026-01-07": { "SAG_T1":15, "SAG_T2":15, "SAG_STIR":15, "AXIAL_T1":44, "AXIAL_T2":44 },
+    "2026-07-02": { "SAG_T1":21, "SAG_T2":21, "SAG_STIR":21, "AXIAL_T2":40 }
+  };
+  var DATES = Object.keys(MANIFEST);
+  var SEQ_ORDER = ["SAG_T1", "SAG_T2", "SAG_STIR", "AXIAL_T1", "AXIAL_T2"];
+  var SEQ_LABELS = { SAG_T1:"Sagittal T1", SAG_T2:"Sagittal T2", SAG_STIR:"Sagittal STIR", AXIAL_T1:"Axial T1", AXIAL_T2:"Axial T2" };
+
+  function fmtLong(dateStr){
+    var d = new Date(dateStr + "T00:00:00");
+    return d.toLocaleDateString("en-US", { year:"numeric", month:"long", day:"numeric" });
+  }
+  function fmtShort(dateStr){
+    var d = new Date(dateStr + "T00:00:00");
+    return d.toLocaleDateString("en-US", { month:"short", day:"numeric", year:"numeric" });
+  }
+  function pad3(n){ return String(n).padStart(3, "0"); }
+
+  var params = new URLSearchParams(window.location.search);
+  var requestedDate = params.get("date");
+
+  var state = {
+    date: (requestedDate && MANIFEST[requestedDate]) ? requestedDate : DATES[DATES.length - 1],
+    seq: null,
+    slice: 0,
+    zoom: 1,
+    panX: 0,
+    panY: 0
+  };
+
+  function availableSeqs(date){
+    return SEQ_ORDER.filter(function(s){ return MANIFEST[date] && (s in MANIFEST[date]); });
+  }
+
+  var datePicker = document.getElementById("date-picker");
+  var seqPicker = document.getElementById("seq-picker");
+  var img = document.getElementById("slice-img");
+  var stage = document.getElementById("stage");
+  var sliceSlider = document.getElementById("slice-slider");
+  var slicePrev = document.getElementById("slice-prev");
+  var sliceNext = document.getElementById("slice-next");
+  var sliceCount = document.getElementById("slice-count");
+  var zoomSlider = document.getElementById("zoom-slider");
+  var zoomReset = document.getElementById("zoom-reset");
+  var metaDate = document.getElementById("meta-date");
+  var metaSeq = document.getElementById("meta-seq");
+  var metaSlice = document.getElementById("meta-slice");
+
+  function buildDatePicker(){
+    DATES.forEach(function(date){
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "picker-btn";
+      btn.textContent = fmtShort(date);
+      btn.addEventListener("click", function(){ selectDate(date); });
+      btn.setAttribute("data-date", date);
+      datePicker.appendChild(btn);
+    });
+  }
+
+  function buildSeqPicker(){
+    seqPicker.innerHTML = "";
+    availableSeqs(state.date).forEach(function(seq){
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "picker-btn";
+      btn.textContent = SEQ_LABELS[seq];
+      btn.addEventListener("click", function(){ selectSeq(seq); });
+      btn.setAttribute("data-seq", seq);
+      seqPicker.appendChild(btn);
+    });
+  }
+
+  function selectDate(date){
+    state.date = date;
+    var seqs = availableSeqs(date);
+    state.seq = seqs.indexOf(state.seq) !== -1 ? state.seq : seqs[0];
+    state.slice = 0;
+    buildSeqPicker();
+    refreshAll();
+  }
+
+  function selectSeq(seq){
+    state.seq = seq;
+    state.slice = 0;
+    resetZoom();
+    refreshAll();
+  }
+
+  function currentCount(){
+    return (MANIFEST[state.date] && MANIFEST[state.date][state.seq]) || 0;
+  }
+
+  function refreshAll(){
+    var count = currentCount();
+    state.slice = Math.min(state.slice, Math.max(0, count - 1));
+
+    [].forEach.call(datePicker.children, function(b){ b.classList.toggle("active", b.getAttribute("data-date") === state.date); });
+    [].forEach.call(seqPicker.children, function(b){ b.classList.toggle("active", b.getAttribute("data-seq") === state.seq); });
+
+    sliceSlider.max = Math.max(0, count - 1);
+    sliceSlider.value = state.slice;
+    slicePrev.disabled = state.slice <= 0;
+    sliceNext.disabled = state.slice >= count - 1;
+
+    if(count > 0){
+      img.style.display = "block";
+      img.src = "mri-images/" + state.date + "/" + state.seq + "/" + pad3(state.slice) + ".jpg";
+      sliceCount.textContent = (state.slice + 1) + " / " + count;
+      sliceCount.style.display = "inline-block";
+    } else {
+      img.style.display = "none";
+      sliceCount.style.display = "none";
+    }
+
+    metaDate.textContent = fmtLong(state.date);
+    metaSeq.textContent = state.seq ? SEQ_LABELS[state.seq] : "—";
+    metaSlice.textContent = count > 0 ? (state.slice + 1) + " of " + count : "—";
+
+    var url = new URL(window.location.href);
+    url.searchParams.set("date", state.date);
+    window.history.replaceState(null, "", url);
+  }
+
+  function resetZoom(){
+    state.zoom = 1; state.panX = 0; state.panY = 0;
+    zoomSlider.value = 1;
+    applyTransform();
+  }
+
+  function applyTransform(){
+    img.style.transform = "translate(" + state.panX + "px," + state.panY + "px) scale(" + state.zoom + ")";
+  }
+
+  sliceSlider.addEventListener("input", function(){
+    state.slice = parseInt(sliceSlider.value, 10);
+    refreshAll();
+  });
+  slicePrev.addEventListener("click", function(){ state.slice = Math.max(0, state.slice - 1); refreshAll(); });
+  sliceNext.addEventListener("click", function(){ state.slice = Math.min(currentCount() - 1, state.slice + 1); refreshAll(); });
+
+  zoomSlider.addEventListener("input", function(){
+    state.zoom = parseFloat(zoomSlider.value);
+    if(state.zoom <= 1){ state.panX = 0; state.panY = 0; }
+    applyTransform();
+  });
+  zoomReset.addEventListener("click", resetZoom);
+
+  stage.addEventListener("wheel", function(e){
+    e.preventDefault();
+    var delta = e.deltaY > 0 ? -0.15 : 0.15;
+    state.zoom = Math.min(4, Math.max(1, state.zoom + delta));
+    zoomSlider.value = state.zoom;
+    if(state.zoom <= 1){ state.panX = 0; state.panY = 0; }
+    applyTransform();
+  }, { passive:false });
+
+  var dragging = false, lastX = 0, lastY = 0;
+  stage.addEventListener("pointerdown", function(e){
+    if(state.zoom <= 1) return;
+    dragging = true; lastX = e.clientX; lastY = e.clientY;
+    stage.classList.add("panning");
+    stage.setPointerCapture(e.pointerId);
+  });
+  stage.addEventListener("pointermove", function(e){
+    if(!dragging) return;
+    state.panX += (e.clientX - lastX); state.panY += (e.clientY - lastY);
+    lastX = e.clientX; lastY = e.clientY;
+    applyTransform();
+  });
+  ["pointerup","pointercancel","pointerleave"].forEach(function(evt){
+    stage.addEventListener(evt, function(){ dragging = false; stage.classList.remove("panning"); });
+  });
+
+  document.addEventListener("keydown", function(e){
+    if(e.target.tagName === "INPUT") return;
+    if(e.key === "ArrowRight"){ e.preventDefault(); state.slice = Math.min(currentCount()-1, state.slice+1); refreshAll(); }
+    if(e.key === "ArrowLeft"){ e.preventDefault(); state.slice = Math.max(0, state.slice-1); refreshAll(); }
+  });
+
+  var themeBtn = document.getElementById("theme-toggle");
+  themeBtn.addEventListener("click", function(){
+    var root = document.documentElement;
+    var current = root.getAttribute("data-theme");
+    var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var effectiveIsDark = current ? current === "dark" : prefersDark;
+    root.setAttribute("data-theme", effectiveIsDark ? "light" : "dark");
+  });
+
+  buildDatePicker();
+  var seqs = availableSeqs(state.date);
+  state.seq = seqs[0];
+  buildSeqPicker();
+  refreshAll();
+})();
+</script>
+</body>
+</html>
