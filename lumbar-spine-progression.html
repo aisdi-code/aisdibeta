@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumbar Spine Progression</title>
+<style>
+  :root{
+    --bg:#F6F4EF;
+    --surface:#FFFFFF;
+    --surface-2:#FBF9F4;
+    --border:#E3DFD2;
+    --text:#262A2E;
+    --text-secondary:#5B6066;
+    --text-muted:#8A8F93;
+    --accent:#2B6E76;
+    --accent-strong:#1F545B;
+    --accent-soft:rgba(43,110,118,0.10);
+    --bone:#ECE6D8;
+    --bone-stroke:#C9BFA6;
+    --canal:#BEC6C3;
+    --disclaimer-bg:#FFF6E3;
+    --disclaimer-border:#E4B95E;
+    --disclaimer-text:#6B4E14;
+    --shadow:0 1px 2px rgba(30,30,20,0.05), 0 10px 28px -14px rgba(30,30,20,0.22);
+    --font-serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Georgia,serif;
+    --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --meter-off:#D8D2C2;
+    --radius-lg:16px;
+    --radius-md:10px;
+  }
+  :root[data-theme="dark"]{
+    --bg:#14181A; --surface:#1B2023; --surface-2:#20262A; --border:#2E3538;
+    --text:#ECEAE4; --text-secondary:#ABB1B3; --text-muted:#7C8285;
+    --accent:#67C6CD; --accent-strong:#8FDBE0; --accent-soft:rgba(103,198,205,0.16);
+    --bone:#32373A; --bone-stroke:#4C5355; --canal:#4B5658;
+    --disclaimer-bg:#2A2314; --disclaimer-border:#6B5324; --disclaimer-text:#EAC97C;
+    --shadow:0 1px 2px rgba(0,0,0,0.5), 0 10px 28px -14px rgba(0,0,0,0.7);
+    --meter-off:#3A3F3F;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#14181A; --surface:#1B2023; --surface-2:#20262A; --border:#2E3538;
+      --text:#ECEAE4; --text-secondary:#ABB1B3; --text-muted:#7C8285;
+      --accent:#67C6CD; --accent-strong:#8FDBE0; --accent-soft:rgba(103,198,205,0.16);
+      --bone:#32373A; --bone-stroke:#4C5355; --canal:#4B5658;
+      --disclaimer-bg:#2A2314; --disclaimer-border:#6B5324; --disclaimer-text:#EAC97C;
+      --shadow:0 1px 2px rgba(0,0,0,0.5), 0 10px 28px -14px rgba(0,0,0,0.7);
+      --meter-off:#3A3F3F;
+    }
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-sans);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:1120px; margin:0 auto; padding:28px 20px 64px; }
+
+  header.app-header{
+    display:flex; align-items:flex-start; justify-content:space-between; gap:16px;
+    margin-bottom:16px;
+  }
+  h1{
+    font-family:var(--font-serif);
+    font-weight:600;
+    font-size:clamp(1.5rem, 1.1rem + 1.4vw, 2.1rem);
+    margin:0 0 4px;
+    letter-spacing:0.2px;
+    text-wrap:balance;
+  }
+  .subtitle{
+    color:var(--text-secondary);
+    font-size:0.95rem;
+    margin:0;
+  }
+  #theme-toggle{
+    flex:0 0 auto;
+    width:38px; height:38px; border-radius:50%;
+    border:1px solid var(--border);
+    background:var(--surface);
+    color:var(--text-secondary);
+    cursor:pointer;
+    font-size:1rem;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:var(--shadow);
+  }
+  #theme-toggle:hover{ color:var(--accent); }
+
+  .disclaimer{
+    display:flex; gap:10px; align-items:flex-start;
+    background:var(--disclaimer-bg);
+    border:1px solid var(--disclaimer-border);
+    color:var(--disclaimer-text);
+    border-radius:var(--radius-md);
+    padding:12px 14px;
+    font-size:0.86rem;
+    margin-bottom:22px;
+  }
+  .disclaimer .icon{ flex:0 0 auto; font-size:1.05rem; line-height:1.3; }
+  .disclaimer strong{ font-weight:700; }
+
+  main.layout{
+    display:grid;
+    grid-template-columns: minmax(300px, 1.05fr) minmax(300px, 0.95fr);
+    gap:22px;
+    align-items:start;
+  }
+  @media (max-width: 880px){
+    main.layout{ grid-template-columns: 1fr; }
+  }
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow);
+    padding:20px;
+  }
+
+  /* --- diagram panel --- */
+  .diagram-panel{ display:flex; flex-direction:column; gap:18px; }
+  .diagram-svg-holder{ display:flex; justify-content:center; }
+  #spine-svg{ width:100%; max-width:300px; height:auto; }
+
+  .segment{ cursor:pointer; }
+  .segment:focus{ outline:none; }
+  .segment:focus .disc-shape{ stroke:var(--accent); stroke-width:3; }
+  .disc-shape{ transition:fill 280ms ease, stroke 150ms ease; stroke:rgba(0,0,0,0.28); stroke-width:1; }
+  :root[data-theme="dark"] .disc-shape{ stroke:rgba(0,0,0,0.5); }
+  .segment:hover .disc-shape{ stroke:var(--accent); stroke-width:2.5; }
+  @media (prefers-reduced-motion: reduce){
+    .disc-shape{ transition:none; }
+  }
+  .vert-body{ fill:var(--bone); stroke:var(--bone-stroke); stroke-width:1.2; }
+  .canal-line{ fill:none; stroke:var(--canal); stroke-width:1.4; stroke-dasharray:2 4; opacity:0.8; }
+  .nub{ fill:var(--bone-stroke); opacity:0.55; }
+  .vert-label{ font-family:var(--font-sans); font-size:11px; fill:var(--text-muted); font-weight:600; }
+  .level-label{ font-family:var(--font-sans); font-size:11.5px; fill:var(--text); font-weight:700; letter-spacing:0.2px; }
+  .meter-dot{ fill:var(--meter-off); }
+  .meter-dash{ font-family:var(--font-sans); font-size:11px; fill:var(--text-muted); }
+  .badge-surgical circle{ fill:#5E35B1; stroke:var(--surface); stroke-width:1.5; }
+  .badge-surgical text{ fill:#fff; font-size:9px; font-weight:700; }
+  .badge-followup circle{ fill:#FFB300; stroke:var(--surface); stroke-width:1.5; }
+  .badge-followup text{ fill:#4A3300; font-size:9px; font-weight:800; }
+  .peak-marker{ fill:var(--accent-strong); }
+
+  /* --- legend --- */
+  .legend{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+    gap:8px 16px;
+    border-top:1px solid var(--border);
+    padding-top:14px;
+  }
+  .legend h3, .impression-card h3, .detail-card h3{
+    font-family:var(--font-sans); font-size:0.72rem; text-transform:uppercase;
+    letter-spacing:0.09em; color:var(--text-muted); font-weight:700; margin:0 0 10px;
+  }
+  .legend-item{ display:flex; align-items:center; gap:8px; font-size:0.83rem; color:var(--text-secondary); }
+  .swatch{ flex:0 0 auto; width:22px; height:13px; border-radius:4px; border:1px solid rgba(0,0,0,0.15); }
+  #legend-hatch{ background:repeating-linear-gradient(45deg, #BDBDBD, #BDBDBD 3px, #9C9C9C 3px, #9C9C9C 6px); }
+  .swatch-badge{ flex:0 0 auto; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; }
+
+  /* --- timeline --- */
+  .timeline-block{ border-top:1px solid var(--border); padding-top:16px; }
+  .timeline-current{
+    display:flex; align-items:baseline; justify-content:space-between; gap:8px;
+    margin-bottom:12px; flex-wrap:wrap;
+  }
+  .timeline-current .date-big{ font-weight:700; font-size:1rem; font-variant-numeric:tabular-nums; }
+  .type-chip{
+    font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;
+    padding:3px 8px; border-radius:999px; background:var(--accent-soft); color:var(--accent-strong);
+  }
+  .type-chip.surgery{ background:rgba(94,53,177,0.14); color:#5E35B1; }
+  .type-chip.no-report{ background:var(--surface-2); color:var(--text-muted); border:1px dashed var(--border); }
+
+  .timeline-row{ display:flex; align-items:center; gap:6px; }
+  .tl-nav{
+    flex:0 0 auto; width:30px; height:30px; border-radius:50%; border:1px solid var(--border);
+    background:var(--surface-2); color:var(--text-secondary); cursor:pointer; font-size:0.95rem;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .tl-nav:disabled{ opacity:0.35; cursor:default; }
+  .tl-nav:not(:disabled):hover{ color:var(--accent); border-color:var(--accent); }
+  .tl-track{
+    flex:1 1 auto; display:flex; align-items:flex-start; gap:2px;
+    overflow-x:auto; padding:6px 2px 2px; position:relative;
+  }
+  .tl-track::before{
+    content:""; position:absolute; left:14px; right:14px; top:15px; height:2px; background:var(--border); z-index:0;
+  }
+  .tl-tick{
+    position:relative; z-index:1; flex:1 1 0; min-width:52px;
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    background:none; border:none; cursor:pointer; padding:2px 2px 4px; font-family:var(--font-sans);
+  }
+  .tl-dot{
+    width:12px; height:12px; border-radius:50%; background:var(--surface); border:2px solid var(--border);
+    position:relative;
+  }
+  .tl-tick[data-type="mri"] .tl-dot{ border-color:var(--accent); }
+  .tl-tick[data-type="no_report"] .tl-dot{ border-color:var(--text-muted); border-style:dashed; }
+  .tl-tick[data-type="surgery"] .tl-dot{ border-color:#5E35B1; background:#5E35B1; }
+  .tl-tick.active .tl-dot{ width:15px; height:15px; box-shadow:0 0 0 4px var(--accent-soft); background:var(--accent); border-color:var(--accent); }
+  .tl-tick.active[data-type="surgery"] .tl-dot{ background:#5E35B1; box-shadow:0 0 0 4px rgba(94,53,177,0.18); }
+  .tl-tick.active[data-type="no_report"] .tl-dot{ background:var(--text-muted); }
+  .tl-label{ font-size:9.5px; color:var(--text-muted); text-align:center; line-height:1.25; font-variant-numeric:tabular-nums; }
+  .tl-tick.active .tl-label{ color:var(--text); font-weight:700; }
+  .tl-peak{ position:absolute; top:-11px; font-size:9px; color:var(--accent-strong); }
+  .tl-tick:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; border-radius:6px; }
+
+  /* --- detail / impression panels --- */
+  .side-col{ display:flex; flex-direction:column; gap:22px; }
+  .detail-empty{ color:var(--text-muted); font-size:0.9rem; }
+  .detail-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
+  .detail-level{ font-family:var(--font-serif); font-size:1.3rem; font-weight:600; }
+  .detail-date{ color:var(--text-secondary); font-size:0.85rem; font-variant-numeric:tabular-nums; }
+  .severity-row{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .severity-chip{ display:flex; align-items:center; gap:8px; padding:5px 11px 5px 7px; border-radius:999px; background:var(--surface-2); border:1px solid var(--border); }
+  .severity-chip .dot{ width:12px; height:12px; border-radius:50%; }
+  .severity-chip span{ font-size:0.82rem; font-weight:700; }
+  .mini-meter{ display:flex; gap:3px; }
+  .mini-meter i{ width:8px; height:8px; border-radius:2px; background:var(--meter-off); display:block; }
+  blockquote.finding{
+    font-family:var(--font-serif); font-size:1.02rem; line-height:1.6; color:var(--text);
+    margin:0 0 14px; padding:2px 0 2px 16px; border-left:3px solid var(--accent-soft);
+  }
+  .badge-line{ display:flex; flex-direction:column; gap:10px; }
+  .info-badge{ display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border-radius:var(--radius-md); font-size:0.85rem; }
+  .info-badge.surgical{ background:rgba(94,53,177,0.09); border:1px solid rgba(94,53,177,0.25); color:var(--text); }
+  .info-badge.followup{ background:rgba(255,179,0,0.12); border:1px solid rgba(255,179,0,0.35); color:var(--text); }
+  .info-badge .ic{ flex:0 0 auto; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; color:#fff; }
+  .info-badge.surgical .ic{ background:#5E35B1; }
+  .info-badge.followup .ic{ background:#FFB300; color:#4A3300; }
+  .info-badge b{ display:block; margin-bottom:2px; }
+
+  .impression-text{ font-family:var(--font-serif); font-size:1rem; line-height:1.65; white-space:pre-line; }
+  .peak-callout{
+    display:inline-flex; align-items:center; gap:6px; font-size:0.72rem; font-weight:700;
+    color:var(--accent-strong); background:var(--accent-soft); padding:4px 10px; border-radius:999px;
+    text-transform:uppercase; letter-spacing:0.05em; margin-bottom:10px;
+  }
+
+  footer{ margin-top:30px; color:var(--text-muted); font-size:0.78rem; text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="app-header">
+    <div>
+      <h1>Lumbar Spine Progression</h1>
+      <p class="subtitle">Personal tracking · 8 MRI exams &amp; 2 surgeries · 2015–2026</p>
+    </div>
+    <button id="theme-toggle" type="button" aria-label="Toggle light/dark theme" title="Toggle theme">◐</button>
+  </header>
+
+  <div class="disclaimer">
+    <span class="icon">ℹ</span>
+    <div><strong>Not a diagnostic tool.</strong> This tool visualizes language from official radiologist reports using a simplified color scale I created for this purpose — it is not a diagnostic tool and not an official grading system. Discuss all findings with your doctor or a spine specialist.</div>
+  </div>
+
+  <main class="layout">
+    <section class="diagram-panel card" aria-label="Spine diagram and timeline">
+      <div>
+        <h3>Lumbar spine · T12–S1</h3>
+        <div class="diagram-svg-holder">
+          <svg id="spine-svg" viewBox="0 0 260 580" role="img" aria-label="Sagittal diagram of the lumbar spine with six clickable disc levels"></svg>
+        </div>
+      </div>
+
+      <div class="legend" aria-label="Color and icon legend">
+        <h3 style="grid-column:1/-1;margin-bottom:2px;">Legend</h3>
+        <div class="legend-item"><span class="swatch" style="background:#4CAF50"></span>Normal (0)</div>
+        <div class="legend-item"><span class="swatch" style="background:#FFEB3B"></span>Mild (1)</div>
+        <div class="legend-item"><span class="swatch" style="background:#FF9800"></span>Moderate (2)</div>
+        <div class="legend-item"><span class="swatch" style="background:#F4511E"></span>Moderate–severe (3)</div>
+        <div class="legend-item"><span class="swatch" style="background:#D32F2F"></span>Severe (4)</div>
+        <div class="legend-item"><span class="swatch" id="legend-hatch"></span>No data this date</div>
+        <div class="legend-item"><span class="swatch-badge" style="background:#5E35B1">★</span>Surgical site</div>
+        <div class="legend-item"><span class="swatch-badge" style="background:#FFB300;color:#4A3300">⚠</span>Follow-up flagged</div>
+      </div>
+
+      <div class="timeline-block">
+        <h3>Timeline</h3>
+        <div class="timeline-current">
+          <span class="date-big" id="tl-current-date">—</span>
+          <span class="type-chip" id="tl-current-type">—</span>
+        </div>
+        <div class="timeline-row">
+          <button class="tl-nav" id="tl-prev" type="button" aria-label="Previous timepoint">‹</button>
+          <div class="tl-track" id="tl-track" role="group" aria-label="Select a timepoint"></div>
+          <button class="tl-nav" id="tl-next" type="button" aria-label="Next timepoint">›</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="side-col">
+      <div class="card detail-card" id="detail-card">
+        <h3>Level detail</h3>
+        <p class="detail-empty" id="detail-empty">Hover or click a level on the diagram to see its finding at the selected date.</p>
+        <div id="detail-body" style="display:none;">
+          <div class="detail-head">
+            <span class="detail-level" id="d-level"></span>
+            <span class="detail-date" id="d-date"></span>
+          </div>
+          <div class="severity-row">
+            <div class="severity-chip"><span class="dot" id="d-dot"></span><span id="d-severity-label"></span></div>
+            <div class="mini-meter" id="d-meter" aria-hidden="true"></div>
+          </div>
+          <blockquote class="finding" id="d-finding"></blockquote>
+          <div class="badge-line" id="d-badges"></div>
+        </div>
+      </div>
+
+      <div class="card impression-card" id="impression-card">
+        <h3 id="impression-title">Radiologist impression</h3>
+        <div id="impression-body">
+          <div class="impression-text" id="impression-text"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Built from your Lumbar Spine MRI Progression Summary. Severity scores are a personal translation of report language, not a clinical scale.</footer>
+</div>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <pattern id="hatchPattern" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+      <rect width="6" height="6" fill="#BDBDBD"></rect>
+      <line x1="0" y1="0" x2="0" y2="6" stroke="#9C9C9C" stroke-width="2"></line>
+    </pattern>
+  </defs>
+</svg>
+
+<script>
+(function(){
+  "use strict";
+
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var LEVELS = ["T12-L1","L1-L2","L2-L3","L3-L4","L4-L5","L5-S1"];
+
+  var SEVERITY = {
+    0: { label: "Normal", color: "#4CAF50" },
+    1: { label: "Mild", color: "#FFEB3B" },
+    2: { label: "Moderate", color: "#FF9800" },
+    3: { label: "Moderate–severe / progressed", color: "#F4511E" },
+    4: { label: "Severe", color: "#D32F2F" }
+  };
+  var NO_DATA_FILL = "url(#hatchPattern)";
+
+  var GENERIC_NORMAL_NOTE = "Not specifically called out in this report — the overall impression for this exam indicates no significant findings at this level.";
+
+  var TIMEPOINTS = [
+    { date:"2015-05-01", type:"mri_no_report", note:"Images available, no report text found in this export." },
+    { date:"2017-03-29", type:"mri",
+      scores:{ "L3-L4":1,"L4-L5":1,"L5-S1":2 },
+      findings:{
+        "L3-L4":"Disc desiccation, normal height. Mild broad-based bulge. No significant narrowing.",
+        "L4-L5":"Disc desiccation, normal height. Broad-based bulge, suggestion of central annular tear.",
+        "L5-S1":"Desiccation, mild height loss. Left paracentral extrusion with inferior displacement. Mild subarticular recess narrowing."
+      },
+      impression:"Multilevel degenerative disc disease; likely annular tear at L4-5; paracentral disc protrusion with inferior extension at L5-S1. Overall similar to mildly worsened, particularly at L5-S1, versus prior comparison."
+    },
+    { date:"2017-09-25", type:"mri", peak_severity:true,
+      scores:{ "L3-L4":1,"L4-L5":2,"L5-S1":4 },
+      findings:{
+        "L3-L4":"Desiccation + height loss. Small broad-based bulge. No significant narrowing.",
+        "L4-L5":"Desiccation + height loss. Small central protrusion touching right L5 nerve root.",
+        "L5-S1":"Desiccation + height loss. Central/left paracentral extrusion INCREASED significantly — severe left lateral recess narrowing, S1 nerve root effaced. Measures 1.7 x 1.1 x 1.3 cm."
+      },
+      impression:"L5-S1 left paracentral disc extrusion increased in size from the prior exam (6 months earlier), with significant impingement on the left S1 nerve root and likely contact with S2."
+    },
+    { date:"2020-02-13", type:"mri",
+      scores:{ "L3-L4":1,"L4-L5":1,"L5-S1":2 },
+      findings:{
+        "L3-L4":"Mild height loss/desiccation. Small posterior protrusion. No canal stenosis.",
+        "L4-L5":"Small central protrusion with annular fissure. No canal stenosis.",
+        "L5-S1":"Moderate height loss. Small broad-based protrusion. Discogenic endplate edema/inflammation, prominent annular fissure."
+      },
+      impression:"Mild to moderate degenerative disc changes in the lower lumbar spine. (No prior study available for comparison at this facility — consistent with an undocumented surgery having occurred between Sept 2017 and this scan.)"
+    },
+    { date:"2021-10-05", type:"mri", surgical_levels:["L5-S1"],
+      scores:{ "L3-L4":1,"L4-L5":1,"L5-S1":1 },
+      findings:{
+        "L3-L4":"Small disc bulge narrows subarticular recesses. Mild facet arthropathy. Mild dehydration.",
+        "L4-L5":"Small left central protrusion, mildly narrows anterior CSF. No clear nerve impingement.",
+        "L5-S1":"Asymmetric bulge, minimal thecal sac indentation. Postsurgical changes from prior microdiscectomy noted."
+      },
+      impression:"Mild degenerative changes of the lumbar spine. Expected postsurgical changes from a prior lower lumbar microdiscectomy."
+    },
+    { date:"2025-04-03", type:"mri", surgical_levels:["L5-S1"],
+      scores:{ "L3-L4":2,"L4-L5":2,"L5-S1":1 },
+      findings:{
+        "L3-L4":"Mild posterior bulge + central annular fissure. Modic II changes, small Schmorl's node (NEW). Mild facet arthropathy.",
+        "L4-L5":"Mild canal stenosis — disc bulge + central extrusion SLIGHTLY ENLARGED vs 2021. Trace right foraminal stenosis. Modic 1 endplate signal.",
+        "L5-S1":"No significant canal stenosis. Mild bilateral foraminal stenosis. Prior LEFT HEMILAMINOTOMY noted. Very small residual left protrusion, no mass effect. Modic 1 signal."
+      },
+      impression:"Mild degenerative changes without high-grade stenosis, slightly progressed from the 10/5/2021 study. Prior left L5 hemilaminotomy."
+    },
+    { date:"2026-01-07", type:"mri_no_report", note:"Images available, no report text found in this export." },
+    { date:"2026-02-18", type:"surgery", surgical_levels:["L4-L5"],
+      summary:"Left L4 laminectomy and left L4-5 discectomy (Dr. Raymond Meyer) for a left L4-5 disc herniation causing severe left leg radiculopathy. Large disc fragments removed; foramen, lateral recess, and thecal sac confirmed widely decompressed."
+    },
+    { date:"2026-07-02", type:"mri", surgical_levels:["L4-L5","L5-S1"], followup_flag_levels:["L5-S1"],
+      followup_flag_note:"New vertebral body signal change — radiologist recommends contrast-enhanced MRI to further characterize.",
+      scores:{ "L3-L4":2,"L4-L5":3,"L5-S1":1 },
+      findings:{
+        "L3-L4":"Mild disc height loss, annular fissure, minimal bulge, mild facet arthrosis. No significant stenosis. Similar to prior.",
+        "L4-L5":"Moderate disc height loss, bulge contacting bilateral L5 nerve roots. Moderate left>right foraminal stenosis — progressed from prior. New central vertebral body edema (Modic 2), post-laminectomy changes.",
+        "L5-S1":"Mild disc height loss, bulge, mild facet arthrosis. No significant canal stenosis. Mild bilateral foraminal stenosis. Similar to prior. New central vertebral body edema (Modic 2)."
+      },
+      impression:"(1) Postsurgical and degenerative findings, most significant at L4-L5, with interval progression to moderate left foraminal stenosis. No high-grade canal stenosis. (2) New nonspecific vertebral body lesions at L5/S1 that may represent interval bone infarcts; T1-hyperintense metastasis (e.g. melanoma) felt less likely absent known malignancy, but flagged for possible further assessment with contrast-enhanced MRI."
+    }
+  ];
+
+  // Fill in the always-normal upper levels wherever a report exists.
+  TIMEPOINTS.forEach(function(tp){
+    if(tp.type === "mri"){
+      ["T12-L1","L1-L2","L2-L3"].forEach(function(lvl){
+        if(!(lvl in tp.scores)){
+          tp.scores[lvl] = 0;
+          tp.findings[lvl] = GENERIC_NORMAL_NOTE;
+        }
+      });
+    }
+  });
+
+  function getStatus(tp, level){
+    var hasData = tp.type === "mri" && tp.scores && (level in tp.scores);
+    return {
+      hasData: hasData,
+      score: hasData ? tp.scores[level] : null,
+      finding: hasData ? tp.findings[level] : null,
+      isSurgical: !!(tp.surgical_levels && tp.surgical_levels.indexOf(level) !== -1),
+      isFollowup: !!(tp.followup_flag_levels && tp.followup_flag_levels.indexOf(level) !== -1)
+    };
+  }
+
+  function fmtLong(dateStr){
+    var d = new Date(dateStr + "T00:00:00");
+    return d.toLocaleDateString("en-US", { year:"numeric", month:"long", day:"numeric" });
+  }
+  function fmtShort(dateStr){
+    var d = new Date(dateStr + "T00:00:00");
+    var month = d.toLocaleDateString("en-US", { month:"short" });
+    var day = d.getDate();
+    var year = d.getFullYear();
+    return { line1: month + " " + day, line2: String(year) };
+  }
+  function typeLabel(tp){
+    if(tp.type === "mri") return "MRI";
+    if(tp.type === "mri_no_report") return "No report";
+    if(tp.type === "surgery") return "Surgery";
+    return "";
+  }
+
+  // ---------- SVG spine geometry ----------
+  var VERTS = [
+    { id:"T12", cx:126, cy:55,  w:64, h:42 },
+    { id:"L1",  cx:132, cy:120, w:68, h:44 },
+    { id:"L2",  cx:140, cy:186, w:72, h:46 },
+    { id:"L3",  cx:146, cy:254, w:76, h:48 },
+    { id:"L4",  cx:148, cy:324, w:80, h:50 },
+    { id:"L5",  cx:142, cy:394, w:84, h:50 },
+    { id:"S1",  cx:124, cy:489, w:92, h:100 }
+  ];
+
+  function buildDiscs(){
+    var discs = [];
+    for(var i=0; i<VERTS.length-1; i++){
+      var a = VERTS[i], b = VERTS[i+1];
+      var topY = a.cy + a.h/2;
+      var botY = b.cy - b.h/2;
+      discs.push({
+        level: LEVELS[i],
+        cx: (a.cx + b.cx)/2,
+        cy: (topY + botY)/2,
+        w: Math.min(a.w, b.w) * 0.82,
+        h: Math.max(14, botY - topY)
+      });
+    }
+    return discs;
+  }
+  var DISCS = buildDiscs();
+  var DISC_BY_LEVEL = {};
+  DISCS.forEach(function(d){ DISC_BY_LEVEL[d.level] = d; });
+
+  function svgEl(tag, attrs){
+    var el = document.createElementNS(SVGNS, tag);
+    for(var k in attrs){ el.setAttribute(k, attrs[k]); }
+    return el;
+  }
+
+  var svg = document.getElementById("spine-svg");
+  var segmentEls = {}; // level -> { g, discShape, meterGroup, surgicalBadge, followupBadge }
+
+  function renderStaticDiagram(){
+    // canal guide line (drawn first, behind everything)
+    var canalPts = VERTS.map(function(v){ return (v.cx - v.w*0.52 - 10) + "," + v.cy; }).join(" ");
+    svg.appendChild(svgEl("polyline", { points: canalPts, class:"canal-line" }));
+
+    // spinous process nubs
+    VERTS.forEach(function(v){
+      svg.appendChild(svgEl("circle", { cx: v.cx - v.w*0.55 - 10, cy: v.cy, r: 6, class:"nub" }));
+    });
+
+    // vertebral bodies
+    VERTS.forEach(function(v){
+      if(v.id === "S1"){
+        var x1 = v.cx - v.w/2, x2 = v.cx + v.w/2;
+        var yTop = v.cy - v.h/2, yBot = v.cy + v.h/2;
+        var bx1 = v.cx - v.w*0.27, bx2 = v.cx + v.w*0.27;
+        var pts = [x1,yTop, x2,yTop, bx2,yBot, bx1,yBot].join(",");
+        var poly = svgEl("polygon", { points: [x1+","+yTop, x2+","+yTop, bx2+","+yBot, bx1+","+yBot].join(" "), class:"vert-body" });
+        svg.appendChild(poly);
+      } else {
+        svg.appendChild(svgEl("rect", {
+          x: v.cx - v.w/2, y: v.cy - v.h/2, width: v.w, height: v.h, rx: 10, class:"vert-body"
+        }));
+      }
+      var lbl = svgEl("text", { x: v.cx - v.w*0.55 - 34, y: v.cy + 4, class:"vert-label", "text-anchor":"end" });
+      lbl.textContent = v.id;
+      svg.appendChild(lbl);
+    });
+
+    // disc segments (clickable/hoverable)
+    DISCS.forEach(function(d){
+      var g = svgEl("g", {
+        class:"segment", tabindex:"0", role:"button",
+        "data-level": d.level,
+        "aria-label": d.level + " disc level"
+      });
+
+      // enlarged invisible hit area for touch/click comfort
+      g.appendChild(svgEl("rect", {
+        x: d.cx - d.w/2 - 4, y: d.cy - d.h/2 - 9, width: d.w + 8, height: d.h + 18,
+        fill:"transparent"
+      }));
+
+      var shape = svgEl("rect", {
+        x: d.cx - d.w/2, y: d.cy - d.h/2, width: d.w, height: d.h, rx: d.h/2,
+        class:"disc-shape"
+      });
+      g.appendChild(shape);
+
+      // severity meter (redundant, non-color encoding) to the right
+      var meterX = 190;
+      var label = svgEl("text", { x: meterX, y: d.cy - 3, class:"level-label" });
+      label.textContent = d.level;
+      g.appendChild(label);
+
+      var meterGroup = svgEl("g", { class:"meter" });
+      for(var i=0; i<5; i++){
+        meterGroup.appendChild(svgEl("rect", {
+          x: meterX + i*8, y: d.cy + 3, width: 6, height: 6, rx: 1.5, class:"meter-dot"
+        }));
+      }
+      var dash = svgEl("text", { x: meterX, y: d.cy + 11, class:"meter-dash", style:"display:none" });
+      dash.textContent = "no data";
+      meterGroup.appendChild(dash);
+      g.appendChild(meterGroup);
+
+      // peak-severity marker (static, only relevant on one date but harmless to render lazily)
+      var peak = svgEl("text", { x: d.cx, y: d.cy - d.h/2 - 12, class:"peak-marker", "text-anchor":"middle", style:"display:none" });
+      peak.textContent = "▲ peak";
+      peak.setAttribute("font-size", "8");
+      g.appendChild(peak);
+
+      // surgical badge
+      var surgBadge = svgEl("g", { class:"badge-surgical", style:"display:none" });
+      surgBadge.appendChild(svgEl("circle", { cx: d.cx + d.w/2 - 2, cy: d.cy - d.h/2 - 2, r: 7 }));
+      var surgText = svgEl("text", { x: d.cx + d.w/2 - 2, y: d.cy - d.h/2 + 1.5, "text-anchor":"middle" });
+      surgText.textContent = "★";
+      surgBadge.appendChild(surgText);
+      g.appendChild(surgBadge);
+
+      // followup badge
+      var flBadge = svgEl("g", { class:"badge-followup", style:"display:none" });
+      flBadge.appendChild(svgEl("circle", { cx: d.cx - d.w/2 + 2, cy: d.cy - d.h/2 - 2, r: 7 }));
+      var flText = svgEl("text", { x: d.cx - d.w/2 + 2, y: d.cy - d.h/2 + 1.5, "text-anchor":"middle" });
+      flText.textContent = "!";
+      flBadge.appendChild(flText);
+      g.appendChild(flBadge);
+
+      svg.appendChild(g);
+
+      segmentEls[d.level] = { g:g, shape:shape, meterGroup:meterGroup, dash:dash, peak:peak, surgBadge:surgBadge, flBadge:flBadge };
+
+      g.addEventListener("mouseenter", function(lvl){ return function(){ state.hoverLevel = lvl; renderDetail(); }; }(d.level));
+      g.addEventListener("mouseleave", function(){ state.hoverLevel = null; renderDetail(); });
+      g.addEventListener("focus", function(lvl){ return function(){ state.hoverLevel = lvl; renderDetail(); }; }(d.level));
+      g.addEventListener("blur", function(){ state.hoverLevel = null; renderDetail(); });
+      g.addEventListener("click", function(lvl){ return function(){ state.pinnedLevel = lvl; renderDetail(); }; }(d.level));
+      g.addEventListener("keydown", function(lvl){ return function(e){
+        if(e.key === "Enter" || e.key === " "){ e.preventDefault(); state.pinnedLevel = lvl; renderDetail(); }
+      }; }(d.level));
+    });
+  }
+
+  // ---------- state ----------
+  var state = { timeIndex: TIMEPOINTS.length - 1, hoverLevel: null, pinnedLevel: "L4-L5" };
+
+  // ---------- diagram update per timepoint ----------
+  function renderDiagramForTimepoint(){
+    var tp = TIMEPOINTS[state.timeIndex];
+    LEVELS.forEach(function(level){
+      var st = getStatus(tp, level);
+      var els = segmentEls[level];
+      if(st.hasData){
+        els.shape.setAttribute("fill", SEVERITY[st.score].color);
+        els.dash.style.display = "none";
+        for(var i=0;i<5;i++){
+          var dot = els.meterGroup.children[i];
+          dot.style.display = "";
+          dot.style.fill = i <= st.score ? SEVERITY[st.score].color : "";
+        }
+      } else {
+        els.shape.setAttribute("fill", NO_DATA_FILL);
+        els.dash.style.display = "block";
+        for(var j=0;j<5;j++){
+          els.meterGroup.children[j].style.display = "none";
+        }
+      }
+      els.surgBadge.style.display = st.isSurgical ? "block" : "none";
+      els.flBadge.style.display = st.isFollowup ? "block" : "none";
+      els.peak.style.display = (tp.peak_severity && st.hasData) ? "block" : "none";
+
+      var aria = level + ", " + fmtLong(tp.date) + ": " +
+        (st.hasData ? SEVERITY[st.score].label : "no data for this level on this date") +
+        (st.finding ? ". " + st.finding : "") +
+        (st.isSurgical ? ". Surgically treated at this level." : "") +
+        (st.isFollowup ? ". Follow-up recommended: " + tp.followup_flag_note : "");
+      els.g.setAttribute("aria-label", aria);
+    });
+  }
+
+  // ---------- detail panel ----------
+  var dLevel = document.getElementById("d-level");
+  var dDate = document.getElementById("d-date");
+  var dDot = document.getElementById("d-dot");
+  var dSevLabel = document.getElementById("d-severity-label");
+  var dMeter = document.getElementById("d-meter");
+  var dFinding = document.getElementById("d-finding");
+  var dBadges = document.getElementById("d-badges");
+  var detailEmpty = document.getElementById("detail-empty");
+  var detailBody = document.getElementById("detail-body");
+
+  function renderDetail(){
+    var level = state.hoverLevel || state.pinnedLevel;
+    if(!level){
+      detailEmpty.style.display = "block";
+      detailBody.style.display = "none";
+      return;
+    }
+    detailEmpty.style.display = "none";
+    detailBody.style.display = "block";
+
+    var tp = TIMEPOINTS[state.timeIndex];
+    var st = getStatus(tp, level);
+
+    dLevel.textContent = level;
+    dDate.textContent = fmtLong(tp.date);
+    dDot.style.background = st.hasData ? SEVERITY[st.score].color : "#BDBDBD";
+    dDot.style.backgroundImage = st.hasData ? "none" : "repeating-linear-gradient(45deg, #BDBDBD, #BDBDBD 2px, #9C9C9C 2px, #9C9C9C 4px)";
+    dSevLabel.textContent = st.hasData ? SEVERITY[st.score].label : "No data at this date";
+
+    dMeter.innerHTML = "";
+    for(var i=0;i<5;i++){
+      var span = document.createElement("i");
+      if(st.hasData && i <= st.score){ span.style.background = SEVERITY[st.score].color; }
+      dMeter.appendChild(span);
+    }
+
+    if(st.finding){
+      dFinding.style.display = "block";
+      dFinding.textContent = st.finding;
+    } else {
+      dFinding.style.display = "block";
+      dFinding.textContent = tp.type === "mri_no_report"
+        ? "No report text available for this exam date."
+        : "This level was not scored on an MRI at this date.";
+    }
+
+    dBadges.innerHTML = "";
+    if(st.isSurgical){
+      var b1 = document.createElement("div");
+      b1.className = "info-badge surgical";
+      b1.innerHTML = '<span class="ic">★</span><div><b>Surgical site</b>Surgically treated at this level as of this date.</div>';
+      dBadges.appendChild(b1);
+    }
+    if(st.isFollowup){
+      var b2 = document.createElement("div");
+      b2.className = "info-badge followup";
+      b2.innerHTML = '<span class="ic">⚠</span><div><b>Follow-up recommended</b>' + tp.followup_flag_note + '</div>';
+      dBadges.appendChild(b2);
+    }
+  }
+
+  // ---------- impression panel ----------
+  var impressionTitle = document.getElementById("impression-title");
+  var impressionText = document.getElementById("impression-text");
+
+  function renderImpression(){
+    var tp = TIMEPOINTS[state.timeIndex];
+    var html = "";
+    if(tp.peak_severity){
+      html += '<span class="peak-callout">▲ Peak severity in this series</span><br>';
+    }
+    if(tp.type === "mri"){
+      impressionTitle.textContent = "Radiologist impression";
+      impressionText.textContent = tp.impression;
+    } else if(tp.type === "surgery"){
+      impressionTitle.textContent = "Surgical summary";
+      impressionText.textContent = tp.summary;
+    } else {
+      impressionTitle.textContent = "Exam note";
+      impressionText.textContent = tp.note;
+    }
+    if(tp.peak_severity){
+      impressionText.innerHTML = '<span class="peak-callout">▲ Peak severity in this series</span><br>' + impressionText.textContent;
+    }
+  }
+
+  // ---------- timeline ----------
+  var tlTrack = document.getElementById("tl-track");
+  var tlPrev = document.getElementById("tl-prev");
+  var tlNext = document.getElementById("tl-next");
+  var tlCurrentDate = document.getElementById("tl-current-date");
+  var tlCurrentType = document.getElementById("tl-current-type");
+
+  function buildTimeline(){
+    TIMEPOINTS.forEach(function(tp, idx){
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "tl-tick";
+      btn.setAttribute("data-type", tp.type === "mri_no_report" ? "no_report" : tp.type);
+      btn.setAttribute("aria-label", typeLabel(tp) + ", " + fmtLong(tp.date));
+
+      var dot = document.createElement("span");
+      dot.className = "tl-dot";
+      if(tp.peak_severity){
+        var peakMark = document.createElement("span");
+        peakMark.className = "tl-peak";
+        peakMark.textContent = "▲";
+        btn.appendChild(peakMark);
+      }
+      var short = fmtShort(tp.date);
+      var label = document.createElement("span");
+      label.className = "tl-label";
+      label.innerHTML = short.line1 + "<br>" + short.line2;
+
+      btn.appendChild(dot);
+      btn.appendChild(label);
+      btn.addEventListener("click", function(){ setTimeIndex(idx); });
+      tlTrack.appendChild(btn);
+    });
+
+    tlTrack.addEventListener("keydown", function(e){
+      if(e.key === "ArrowRight"){ e.preventDefault(); setTimeIndex(Math.min(TIMEPOINTS.length-1, state.timeIndex+1)); focusCurrentTick(); }
+      if(e.key === "ArrowLeft"){ e.preventDefault(); setTimeIndex(Math.max(0, state.timeIndex-1)); focusCurrentTick(); }
+      if(e.key === "Home"){ e.preventDefault(); setTimeIndex(0); focusCurrentTick(); }
+      if(e.key === "End"){ e.preventDefault(); setTimeIndex(TIMEPOINTS.length-1); focusCurrentTick(); }
+    });
+    tlPrev.addEventListener("click", function(){ setTimeIndex(Math.max(0, state.timeIndex-1)); });
+    tlNext.addEventListener("click", function(){ setTimeIndex(Math.min(TIMEPOINTS.length-1, state.timeIndex+1)); });
+  }
+
+  function focusCurrentTick(){
+    var ticks = tlTrack.querySelectorAll(".tl-tick");
+    if(ticks[state.timeIndex]) ticks[state.timeIndex].focus();
+  }
+
+  function renderTimeline(){
+    var ticks = tlTrack.querySelectorAll(".tl-tick");
+    ticks.forEach(function(t, idx){
+      var active = idx === state.timeIndex;
+      t.classList.toggle("active", active);
+      t.setAttribute("aria-current", active ? "step" : "false");
+      if(active){ t.scrollIntoView({ block: "nearest", inline: "center" }); }
+    });
+    var tp = TIMEPOINTS[state.timeIndex];
+    tlCurrentDate.textContent = fmtLong(tp.date);
+    tlCurrentType.textContent = typeLabel(tp);
+    tlCurrentType.className = "type-chip" + (tp.type === "surgery" ? " surgery" : tp.type === "mri_no_report" ? " no-report" : "");
+    tlPrev.disabled = state.timeIndex === 0;
+    tlNext.disabled = state.timeIndex === TIMEPOINTS.length - 1;
+  }
+
+  function setTimeIndex(idx){
+    state.timeIndex = idx;
+    renderDiagramForTimepoint();
+    renderTimeline();
+    renderDetail();
+    renderImpression();
+  }
+
+  // ---------- theme toggle ----------
+  var themeBtn = document.getElementById("theme-toggle");
+  themeBtn.addEventListener("click", function(){
+    var root = document.documentElement;
+    var current = root.getAttribute("data-theme");
+    var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var effectiveIsDark = current ? current === "dark" : prefersDark;
+    root.setAttribute("data-theme", effectiveIsDark ? "light" : "dark");
+  });
+
+  // ---------- init ----------
+  renderStaticDiagram();
+  buildTimeline();
+  setTimeIndex(state.timeIndex);
+})();
+</script>
+</body>
+</html>
